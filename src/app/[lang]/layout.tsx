@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { notFound } from "next/navigation";
 import { site } from "@/data/site";
+import { hasLocale, localeInfo, locales } from "@/i18n/locales";
 import { fontVariables } from "@/lib/fonts";
 import { siteUrl } from "@/lib/site-url";
 import { themeColors } from "@/lib/theme-colors";
-import "./globals.css";
+import "../globals.css";
 
 const title = `${site.name} — Portfólio`;
 const description = `${site.role}. Portfólio de ${site.name}.`;
@@ -27,9 +29,25 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+// Gera /pt-br e /en no build, como páginas estáticas.
+export function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
+
+export default async function RootLayout({
+  children,
+  params,
+}: LayoutProps<"/[lang]">) {
+  const { lang } = await params;
+  // O proxy só deixa passar idiomas válidos. Isto cobre o que ele ignora
+  // (caminhos com ponto, como /foo.png).
+  if (!hasLocale(lang)) notFound();
+
   return (
-    <html lang="pt-BR" className={`${fontVariables} h-full antialiased`}>
+    <html
+      lang={localeInfo[lang].htmlLang}
+      className={`${fontVariables} h-full antialiased`}
+    >
       <body className="flex min-h-full flex-col bg-ink-900 font-sans text-fg">
         {children}
       </body>
