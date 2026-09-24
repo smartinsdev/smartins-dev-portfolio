@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { errorTexts } from "@/i18n/error-texts";
+import { usePathLocale } from "@/i18n/use-path-locale";
 import { StatusPage } from "./status-page";
 
 type ErrorScreenProps = {
@@ -12,6 +14,9 @@ type ErrorScreenProps = {
 };
 
 export function ErrorScreen({ error, retry }: ErrorScreenProps) {
+  const locale = usePathLocale();
+  const texts = errorTexts[locale];
+
   useEffect(() => {
     // Por enquanto só no console. Um serviço de monitoramento (ex.:
     // Sentry) receberia o erro aqui.
@@ -20,16 +25,16 @@ export function ErrorScreen({ error, retry }: ErrorScreenProps) {
 
   return (
     <StatusPage
-      code="Erro"
-      title="Algo deu errado"
-      description="Um erro inesperado impediu esta página de carregar. Tente de novo; se continuar, volte para o início."
+      code={texts.code}
+      title={texts.title}
+      description={texts.description}
     >
-      <Button onClick={() => retry()}>Tentar de novo</Button>
+      <Button onClick={() => retry()}>{texts.retry}</Button>
       <a
-        href="/"
+        href={`/${locale}`}
         className="text-fg-muted underline-offset-4 transition-colors duration-200 hover:text-fg hover:underline"
       >
-        Voltar para o início
+        {texts.back}
       </a>
     </StatusPage>
   );

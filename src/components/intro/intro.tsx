@@ -7,6 +7,7 @@ import { createIntroTimeline, releaseIntro } from "@/animations/intro-timeline";
 import { useImagesReady } from "@/hooks/use-images-ready";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { IntroDoneContext } from "./intro-done";
+import { hasIntroPlayed, markIntroPlayed } from "./intro-played";
 import { Preloader } from "./preloader";
 
 const MOTION_QUERIES = {
@@ -40,13 +41,28 @@ export function Intro({ children }: { children: ReactNode }) {
       gsap.matchMedia().add(MOTION_QUERIES, (context) => {
         const tl = createIntroTimeline({
           reducedMotion: Boolean(context.conditions?.reducedMotion),
-          onComplete: () => setIntroDone(true),
+          onComplete: () => {
+            markIntroPlayed();
+            setIntroDone(true);
+          },
         });
+        timeline.current = tl;
+
+        // A intro já tocou nesta aba (ex.: a pessoa trocou de idioma).
+        // Em vez de repetir, a timeline salta para o fim: progress(1) =
+        // 100% do caminho. Antes sai a pausa das imagens, senão o salto
+        // pararia nela. O useGSAP roda antes de o navegador pintar a
+        // tela, então o preloader nem aparece. O salto não suprime os
+        // callbacks, então o onComplete dispara e a luz do mouse liga.
+        if (hasIntroPlayed()) {
+          releaseIntro(tl);
+          tl.progress(1);
+          return;
+        }
 
         // Se a preferência mudar depois de as imagens carregarem, a
         // timeline nova não pode ficar parada esperando por elas.
         if (imagesLoaded.current) releaseIntro(tl);
-        timeline.current = tl;
 
         // Clicar, tocar, rolar ou apertar uma tecla acelera o resto da
         // intro. A função devolvida aqui é a limpeza: o matchMedia chama
