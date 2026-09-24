@@ -1,4 +1,5 @@
 import { INTRO } from "@/animations/intro-targets";
+import { PreferencesMenu } from "@/components/preferences/preferences-menu";
 import { Logo } from "@/components/ui/logo";
 import { site } from "@/data/site";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -21,20 +22,27 @@ export async function Navbar() {
         <span className="sr-only">{site.name}</span>
       </a>
 
-      <nav data-intro={INTRO.nav} aria-label={dict.nav.label}>
-        <ul className="flex gap-[clamp(0.25rem,1.2vw,2rem)] text-[clamp(0.875rem,0.85vw,1.125rem)] font-medium">
-          {site.nav.map((section) => (
-            <li key={section}>
-              <a
-                href={`#${section}`}
-                className="inline-flex min-h-11 items-center px-[0.6em] text-fg-muted transition-colors duration-200 hover:text-fg"
-              >
-                {dict.nav[section]}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* Links e preferências entram juntos na intro. O botão fica fora do
+          <nav> porque não é navegação. Abaixo de 360px o espaço entre os
+          links diminui para o botão caber (medido antes: sobravam 7px em
+          320px, e o botão precisa de 44px). */}
+      <div data-intro={INTRO.nav} className="flex items-center">
+        <nav aria-label={dict.nav.label}>
+          <ul className="flex gap-[clamp(0.25rem,1.2vw,2rem)] text-[clamp(0.875rem,0.85vw,1.125rem)] font-medium max-[22.5rem]:gap-0">
+            {site.nav.map((section) => (
+              <li key={section}>
+                <a
+                  href={`#${section}`}
+                  className="inline-flex min-h-11 items-center px-[0.6em] text-fg-muted transition-colors duration-200 hover:text-fg max-[22.5rem]:px-[0.2em]"
+                >
+                  {dict.nav[section]}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <PreferencesMenu />
+      </div>
     </header>
   );
 }
