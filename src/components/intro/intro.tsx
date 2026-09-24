@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { speedUpOnInput } from "@/animations/intro-skip";
 import { createIntroTimeline, releaseIntro } from "@/animations/intro-timeline";
 import { useImagesReady } from "@/hooks/use-images-ready";
 import { gsap, useGSAP } from "@/lib/gsap";
@@ -46,6 +47,11 @@ export function Intro({ children }: { children: ReactNode }) {
         // timeline nova não pode ficar parada esperando por elas.
         if (imagesLoaded.current) releaseIntro(tl);
         timeline.current = tl;
+
+        // Clicar, tocar, rolar ou apertar uma tecla acelera o resto da
+        // intro. A função devolvida aqui é a limpeza: o matchMedia chama
+        // ela quando desfaz tudo (ao desmontar ou mudar a preferência).
+        return speedUpOnInput(tl);
       });
     },
     { scope: root },
