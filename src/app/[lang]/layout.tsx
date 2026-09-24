@@ -1,28 +1,48 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { site } from "@/data/site";
-import { hasLocale, localeInfo, locales } from "@/i18n/locales";
+import { dictionaries } from "@/i18n/dictionaries";
+import { hasLocale, hreflangPaths, localeInfo, locales } from "@/i18n/locales";
 import { fontVariables } from "@/lib/fonts";
 import { siteUrl } from "@/lib/site-url";
 import { themeColors } from "@/lib/theme-colors";
 import "../globals.css";
 
-const title = `${site.name} — Portfólio`;
-const description = `${site.role}. Portfólio de ${site.name}.`;
+type LayoutParams = { params: Promise<{ lang: string }> };
 
-export const metadata: Metadata = {
-  metadataBase: siteUrl,
-  title: { default: title, template: `%s — ${site.name}` },
-  description,
-  openGraph: {
-    type: "website",
-    locale: "pt_BR",
-    siteName: title,
-    title,
-    description,
-  },
-  twitter: { card: "summary_large_image" },
-};
+export async function generateMetadata({
+  params,
+}: LayoutParams): Promise<Metadata> {
+  const { lang } = await params;
+  if (!hasLocale(lang)) notFound();
+
+  const { meta } = dictionaries[lang];
+  const title = `${site.name} — ${meta.title}`;
+
+  return {
+    metadataBase: siteUrl,
+    title: { default: title, template: `%s — ${site.name}` },
+    description: meta.description,
+    alternates: {
+      canonical: `/${lang}`,
+      // hreflang: avisa o Google que /pt-br e /en são a mesma página em
+      // dois idiomas. x-default é para quem não lê nenhum dos dois: "/"
+      // deixa o proxy escolher.
+      languages: { ...hreflangPaths, "x-default": "/" },
+    },
+    openGraph: {
+      type: "website",
+      locale: localeInfo[lang].ogLocale,
+      alternateLocale: locales
+        .filter((other) => other !== lang)
+        .map((other) => localeInfo[other].ogLocale),
+      siteName: title,
+      title,
+      description: meta.description,
+    },
+    twitter: { card: "summary_large_image" },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: themeColors.ink900,

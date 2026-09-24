@@ -1,19 +1,25 @@
 import type { Metadata } from "next";
 import { StatusPage } from "@/components/status/status-page";
 import { ButtonLink } from "@/components/ui/button-link";
+import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Página não encontrada",
-};
+// O not-found não recebe `params`, mas next/root-params não precisa deles:
+// getDictionary() descobre o idioma sozinho.
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return { title: dict.notFound.title };
+}
 
-export default function NotFound() {
+export default async function NotFound() {
+  const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
+
   return (
     <StatusPage
       code="404"
-      title="Página não encontrada"
-      description="O endereço pode ter mudado ou nunca ter existido."
+      title={dict.notFound.title}
+      description={dict.notFound.description}
     >
-      <ButtonLink href="/">Voltar para o início</ButtonLink>
+      <ButtonLink href={`/${locale}`}>{dict.notFound.back}</ButtonLink>
     </StatusPage>
   );
 }

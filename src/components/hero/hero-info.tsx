@@ -2,9 +2,11 @@ import { INTRO } from "@/animations/intro-targets";
 import { ButtonLink } from "@/components/ui/button-link";
 import { StatusDot } from "@/components/ui/status-dot";
 import { site } from "@/data/site";
+import { getDictionary } from "@/i18n/get-dictionary";
 
-export function HeroInfo() {
-  const [firstLine, ...otherLines] = site.tagline;
+export async function HeroInfo() {
+  const dict = await getDictionary();
+  const [firstLine, ...otherLines] = dict.hero.tagline;
 
   return (
     <div className="grid w-full items-center gap-7 text-center md:grid-cols-3 md:gap-6 md:text-left">
@@ -28,7 +30,7 @@ export function HeroInfo() {
         data-intro={INTRO.info}
         className="flex justify-center text-[clamp(1rem,1.6cqi,1.625rem)]"
       >
-        <ButtonLink href={site.cta.href}>{site.cta.label}</ButtonLink>
+        <ButtonLink href={site.ctaHref}>{dict.hero.cta}</ButtonLink>
       </div>
 
       <ul
@@ -50,7 +52,7 @@ export function HeroInfo() {
               >
                 ↗
               </span>
-              <span className="sr-only">(abre em nova aba)</span>
+              <span className="sr-only">{dict.hero.newTab}</span>
             </a>
           </li>
         ))}

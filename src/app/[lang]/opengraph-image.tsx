@@ -1,10 +1,12 @@
 import { ImageResponse } from "next/og";
 import { Logo } from "@/components/ui/logo";
 import { site } from "@/data/site";
+import { dictionaries } from "@/i18n/dictionaries";
+import { defaultLocale, hasLocale } from "@/i18n/locales";
 import { loadOgFonts } from "@/lib/og-fonts";
 import { themeColors as c } from "@/lib/theme-colors";
 
-export const alt = `${site.name} — ${site.role}`;
+export const alt = site.name;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -16,7 +18,16 @@ function alpha(hex: string, opacity: number) {
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
-export default async function OpengraphImage() {
+// Uma imagem por idioma. Rotas de imagem não rodam next/root-params, então
+// o idioma vem de `params`, como numa página comum.
+export default async function OpengraphImage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const { role } = dictionaries[hasLocale(lang) ? lang : defaultLocale].hero;
+
   return new ImageResponse(
     <div
       style={{
@@ -63,7 +74,7 @@ export default async function OpengraphImage() {
           color: "transparent",
         }}
       >
-        {site.role}
+        {role}
       </div>
     </div>,
     { ...size, fonts: await loadOgFonts() },
