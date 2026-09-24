@@ -57,12 +57,16 @@ function createFullTimeline(onComplete?: () => void) {
 
   // Labels são marcos de tempo com nome. Posicionar tweens por label
   // deixa fácil ajustar: mudou o label, tudo que depende dele acompanha.
-  // "+=0.25" = 0.25s depois do fim do desenho, com a logo pronta na tela.
-  tl.addLabel(WAIT, "+=0.25")
+  // Sem posição, o label fica no fim do que já existe: o fim do desenho.
+  //
+  // Os tempos são curtos de propósito. O nome é o maior elemento da tela,
+  // e o LCP (Largest Contentful Paint) só conta quando ele aparece: quanto
+  // antes o "title", melhor a nota. Por isso a grade entra durante o voo.
+  tl.addLabel(WAIT)
     .addLabel("fly", WAIT)
-    .addLabel("enter", "fly+=0.5")
-    .addLabel("title", "enter+=1")
-    .addLabel("details", "title+=1");
+    .addLabel("enter", "fly+=0.15")
+    .addLabel("title", "enter+=0.45")
+    .addLabel("details", "title+=0.8");
 
   // addPause: quando a agulha chega no WAIT, a timeline se pausa sozinha.
   // releaseIntro() tira essa pausa quando as imagens estiverem prontas.
@@ -76,7 +80,7 @@ function createFullTimeline(onComplete?: () => void) {
   tl.add(
     Flip.fit(preloaderLogo, target(INTRO.navLogo), {
       scale: true,
-      duration: 1.2,
+      duration: 1,
       ease: "power3.inOut",
     }) as gsap.core.Tween,
     "fly",
@@ -137,17 +141,17 @@ function createFullTimeline(onComplete?: () => void) {
   );
 
   // 3. Nome palavra por palavra, como o "VI" e depois o "grand theft auto":
-  //    o stagger faz "Martins" entrar 0.3s depois de "Sinval".
+  //    o stagger faz "Martins" entrar 0.2s depois de "Sinval".
   tl.fromTo(
     target(INTRO.titleWord),
     { autoAlpha: 0, scale: 1.15 },
-    { autoAlpha: 1, scale: 1, duration: 1.2, stagger: 0.3 },
+    { autoAlpha: 1, scale: 1, duration: 1.2, stagger: 0.2 },
     "title",
   ).fromTo(
     target(INTRO.subtitle),
     { autoAlpha: 0, y: 16 },
     { autoAlpha: 1, y: 0, duration: 0.8 },
-    "title+=0.65",
+    "title+=0.5",
   );
 
   // 4. Linha de baixo em cascata: stagger atrasa cada item em 0.12s.
