@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import type { MouseEvent } from "react";
+import { type MouseEvent, useEffect } from "react";
 import { markIntroPlayed } from "@/components/intro/intro-played";
 import { type Locale, localeInfo, locales } from "@/i18n/locales";
 import { localizePath } from "@/i18n/localize-path";
@@ -11,11 +11,29 @@ type LanguageSwitchProps = {
   current: Locale;
   /** id do texto "Idioma", que dá nome à lista para leitores de tela. */
   labelledBy: string;
+  /** id do botão de preferências, que recebe o foco depois da troca. */
+  returnFocusTo: string;
 };
 
-export function LanguageSwitch({ current, labelledBy }: LanguageSwitchProps) {
+// Na troca de idioma a página é montada de novo, e o foco cairia no
+// <body>: quem usa teclado ou leitor de tela perderia o lugar. Esta
+// variável de módulo sobrevive à troca e avisa o seletor novo para
+// devolver o foco ao botão de preferências.
+let returnFocusAfterSwitch = false;
+
+export function LanguageSwitch({
+  current,
+  labelledBy,
+  returnFocusTo,
+}: LanguageSwitchProps) {
   const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (!returnFocusAfterSwitch) return;
+    returnFocusAfterSwitch = false;
+    document.getElementById(returnFocusTo)?.focus();
+  }, [returnFocusTo]);
 
   function switchTo(event: MouseEvent<HTMLAnchorElement>, locale: Locale) {
     // Ctrl/Cmd/Shift/Alt + clique ou botão do meio: o navegador abre em
@@ -36,6 +54,7 @@ export function LanguageSwitch({ current, labelledBy }: LanguageSwitchProps) {
     // A página do outro idioma pode montar a intro de novo: isto avisa
     // que ela já tocou e deve aparecer pronta.
     markIntroPlayed();
+    returnFocusAfterSwitch = true;
     // Navegação do Next no cliente, sem recarregar a página.
     // replace: o botão voltar não vira uma alternância entre idiomas.
     // scroll: false: a página fica onde estava. O hash (#about) vai junto,

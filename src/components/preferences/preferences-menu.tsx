@@ -4,6 +4,7 @@ import { LanguageSwitch } from "./language-switch";
 import styles from "./preferences-menu.module.css";
 
 const PANEL_ID = "preferences-panel";
+const BUTTON_ID = "preferences-button";
 const LANGUAGE_LABEL_ID = "preferences-language";
 
 /**
@@ -19,6 +20,7 @@ export async function PreferencesMenu() {
       {/* popoverTarget liga o botão ao painel pelo id. O navegador também
           informa aos leitores de tela se o painel está aberto. */}
       <button
+        id={BUTTON_ID}
         type="button"
         popoverTarget={PANEL_ID}
         aria-label={dict.preferences.open}
@@ -42,7 +44,11 @@ export async function PreferencesMenu() {
         >
           {dict.preferences.language}
         </p>
-        <LanguageSwitch current={locale} labelledBy={LANGUAGE_LABEL_ID} />
+        <LanguageSwitch
+          current={locale}
+          labelledBy={LANGUAGE_LABEL_ID}
+          returnFocusTo={BUTTON_ID}
+        />
       </div>
     </>
   );

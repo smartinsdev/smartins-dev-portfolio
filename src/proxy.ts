@@ -11,6 +11,7 @@ import { negotiateLocale } from "@/i18n/negotiate-locale";
  */
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  // O matcher já tira as páginas com idioma; isto é só uma rede de segurança.
   if (pathLocale(pathname)) return NextResponse.next();
 
   const locale = negotiateLocale({
@@ -29,7 +30,11 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Tudo, menos os arquivos internos do Next (_next) e caminhos com ponto
-  // (imagens, robots.txt, sitemap.xml, manifest, ícones).
-  matcher: ["/((?!_next|.*\\..*).*)"],
+  // Tudo, menos os arquivos internos do Next (_next), as páginas que já
+  // têm idioma (/pt-br, /en/...) e caminhos com ponto (imagens,
+  // robots.txt, sitemap.xml, manifest, ícones). Assim as páginas estáticas
+  // não pagam uma execução do proxy a cada visita.
+  // Os idiomas se repetem aqui porque o Next lê o matcher no build, como
+  // texto fixo. O teste proxy-matcher.test.ts acusa um idioma esquecido.
+  matcher: ["/((?!_next|(?:pt-br|en)(?:/|$)|.*\\..*).*)"],
 };
