@@ -36,7 +36,7 @@ export async function PreferencesMenu() {
       <div
         id={PANEL_ID}
         popover="auto"
-        className={`${styles.panel} fixed inset-auto top-[calc(clamp(1rem,2.6svh,2.5rem)+3.25rem)] right-[clamp(1.25rem,3vw,5rem)] m-0 w-56 rounded-xl border-0 bg-ink-800 p-4 text-fg shadow-2xl shadow-black/40 ring-1 ring-line`}
+        className={`${styles.panel} fixed inset-auto top-[calc(clamp(1rem,2.6svh,2.5rem)+3.25rem)] right-[clamp(1.25rem,3vw,5rem)] m-0 w-56 rounded-xl border-0 bg-surface p-4 text-fg shadow-2xl shadow-black/40 ring-1 ring-line`}
       >
         <p
           id={LANGUAGE_LABEL_ID}
