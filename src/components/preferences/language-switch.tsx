@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import type { MouseEvent } from "react";
+import { markIntroPlayed } from "@/components/intro/intro-played";
 import { type Locale, localeInfo, locales } from "@/i18n/locales";
 import { localizePath } from "@/i18n/localize-path";
 import { rememberLocale } from "@/i18n/remember-locale";
@@ -32,6 +33,9 @@ export function LanguageSwitch({ current, labelledBy }: LanguageSwitchProps) {
 
     event.preventDefault();
     rememberLocale(locale);
+    // A página do outro idioma pode montar a intro de novo: isto avisa
+    // que ela já tocou e deve aparecer pronta.
+    markIntroPlayed();
     // Navegação do Next no cliente, sem recarregar a página.
     // replace: o botão voltar não vira uma alternância entre idiomas.
     // scroll: false: a página fica onde estava. O hash (#about) vai junto,
