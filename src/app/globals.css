@@ -1,1 +1,67 @@
 @import "tailwindcss";
+
+@theme {
+  --color-ink-950: #04070e;
+  --color-ink-900: #070c17;
+  --color-ink-800: #0c1424;
+  --color-ink-700: #14203a;
+  --color-line: #1e2b45;
+  --color-fg: #f3f6fb;
+  --color-fg-muted: #93a1b8;
+  --color-ts: #3178c6;
+  --color-ts-light: #6aa8f5;
+  --color-react: #61dafb;
+  --color-node: #5fa04e;
+  --color-node-light: #8cc84b;
+  --color-node-lighter: #a6db6c;
+}
+
+@theme inline {
+  --font-display: var(--font-display-family), Georgia, serif;
+  --font-sans: var(--font-body-family), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-family), ui-monospace, monospace;
+  --color-accent: var(--color-node-light);
+  --color-accent-strong: var(--color-node-lighter);
+  --color-accent-foreground: var(--color-ink-950);
+}
+@utility bg-stack-glow {
+  background-color: var(--color-ink-900);
+  background-image:
+    radial-gradient(
+      55% 45% at 0% 35%,
+      color-mix(in oklab, var(--color-ts) 24%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      50% 40% at 100% 75%,
+      color-mix(in oklab, var(--color-node) 16%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      circle at 1px 1px,
+      rgb(255 255 255 / 0.05) 1px,
+      transparent 0
+    );
+  background-size:
+    auto,
+    auto,
+    28px 28px;
+}
+@utility title-glow {
+  text-shadow:
+    0 2px 4px rgb(4 7 14 / 0.5),
+    0 8px 40px rgb(4 7 14 / 0.85),
+    0 0 90px color-mix(in oklab, var(--color-ts) 40%, transparent);
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-react);
+    outline-offset: 4px;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-ts) 55%, transparent);
+    color: var(--color-fg);
+  }
+}
