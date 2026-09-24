@@ -14,6 +14,29 @@
   --color-node: #5fa04e;
   --color-node-light: #8cc84b;
   --color-node-lighter: #a6db6c;
+
+  --animate-breathe: breathe 2.4s ease-in-out infinite;
+  --animate-nudge: nudge 1.6s ease-in-out infinite;
+
+  @keyframes breathe {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes nudge {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(6px);
+    }
+  }
 }
 
 @theme inline {
@@ -63,5 +86,17 @@
   ::selection {
     background-color: color-mix(in oklab, var(--color-ts) 55%, transparent);
     color: var(--color-fg);
+  }
+}
+
+@media (scripting: enabled) {
+  [data-intro]:not([data-intro="preloader"]) {
+    visibility: hidden;
+  }
+}
+
+@media (scripting: none) {
+  [data-intro="preloader"] {
+    display: none;
   }
 }
