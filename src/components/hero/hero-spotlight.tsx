@@ -7,7 +7,13 @@ import { gsap, useGSAP } from "@/lib/gsap";
 
 const POINTER_QUERY =
   "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
-const LAYERS = ["from-ts/35", "from-react/22", "from-node/35"];
+// Uma camada por cor. No claro, cor sobre fundo claro pesa mais: as
+// camadas têm metade da força.
+const LAYERS = [
+  "from-ts/35 light:from-ts/18",
+  "from-react/22 light:from-react/12",
+  "from-node/35 light:from-node/18",
+];
 
 export function HeroSpotlight() {
   const area = useRef<HTMLDivElement>(null);

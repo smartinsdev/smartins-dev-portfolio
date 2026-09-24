@@ -25,9 +25,20 @@ type LogoProps = ComponentProps<"svg"> & {
    * desenha a logo fora do React, onde hooks não rodam.
    */
   id: string;
+  /**
+   * Cor dos contornos. Na página, o padrão `currentColor` pega a cor do
+   * texto em volta (o `text-fg` do <body>), que muda com o tema. A imagem
+   * de Open Graph passa um hex: o Satori, que desenha a imagem, não
+   * entende `currentColor`.
+   */
+  strokeColor?: string;
 };
 
-export function Logo({ id, ...props }: LogoProps) {
+export function Logo({
+  id,
+  strokeColor = "currentColor",
+  ...props
+}: LogoProps) {
   const maskId = `${id}-mask`;
   const barId = `${id}-bar`;
   const { x, y, width, height } = AREA;
@@ -73,20 +84,20 @@ export function Logo({ id, ...props }: LogoProps) {
           height="119"
           rx="5.5"
           fill={`url(#${barId})`}
-          stroke={c.fg}
+          stroke={strokeColor}
         />
         {/* Traço de 8 centrado na borda, com a metade de dentro escondida
             pela máscara: sobra um contorno de 4 só por fora, como no Figma. */}
         <path
           data-logo-part="letter"
           d={LETTER_S}
-          stroke={c.fg}
+          stroke={strokeColor}
           strokeWidth="8"
         />
         <path
           data-logo-part="letter"
           d={LETTER_M}
-          stroke={c.fg}
+          stroke={strokeColor}
           strokeWidth="8"
         />
       </g>
@@ -98,7 +109,7 @@ export function Logo({ id, ...props }: LogoProps) {
         rx="13.5"
         ry="13"
         fill={c.nodeLight}
-        stroke={c.fg}
+        stroke={strokeColor}
         strokeWidth="3"
       />
     </svg>

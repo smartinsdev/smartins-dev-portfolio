@@ -15,7 +15,7 @@ export const themeColors = {
   pageLight: "#f4f7fb",
   line: "#1e2b45",
   fg: "#f3f6fb",
-  fgMuted: "#93a1b8",
+  fgMuted: "#adb8c9",
   ts: "#3178c6",
   tsLight: "#6aa8f5",
   react: "#61dafb",

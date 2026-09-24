@@ -67,6 +67,7 @@ export default async function OpengraphImage({
     >
       <Logo
         id="og-logo"
+        strokeColor={c.fg}
         width={120}
         height={56}
         style={{ position: "absolute", top: 52, left: 72 }}
