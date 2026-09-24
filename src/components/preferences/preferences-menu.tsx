@@ -2,6 +2,7 @@ import { SlidersIcon } from "@/components/ui/sliders-icon";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { LanguageSwitch } from "./language-switch";
 import styles from "./preferences-menu.module.css";
+import { ThemeSwitch } from "./theme-switch";
 
 const PANEL_ID = "preferences-panel";
 const BUTTON_ID = "preferences-button";
@@ -10,7 +11,9 @@ const LANGUAGE_LABEL_ID = "preferences-language";
 /**
  * Botão da navbar que abre o painel de preferências. Abrir e fechar é
  * trabalho do navegador (atributo `popover`), então isto continua sendo
- * server component. Só o seletor de idioma roda no cliente.
+ * server component. Só os seletores de idioma e de tema rodam no
+ * cliente, e recebem os textos por props: os dicionários ficam no
+ * servidor.
  */
 export async function PreferencesMenu() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
@@ -49,6 +52,14 @@ export async function PreferencesMenu() {
           labelledBy={LANGUAGE_LABEL_ID}
           returnFocusTo={BUTTON_ID}
         />
+        {/* noscript:hidden: sem JavaScript, trocar o tema não funciona
+            (o site segue o sistema, só com CSS), então o grupo some. */}
+        <div className="mt-4 noscript:hidden">
+          <ThemeSwitch
+            legend={dict.preferences.theme}
+            labels={dict.preferences.themes}
+          />
+        </div>
       </div>
     </>
   );
