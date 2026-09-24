@@ -38,7 +38,8 @@ yarn-error.log*
 
 # AI
 /.claude
-/.agent
+/.agents
+skills-lock.json
 
 # typescript
 *.tsbuildinfo
