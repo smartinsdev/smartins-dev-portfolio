@@ -15,18 +15,7 @@
   --color-node-light: #8cc84b;
   --color-node-lighter: #a6db6c;
 
-  --animate-breathe: breathe 2.4s ease-in-out infinite;
   --animate-nudge: nudge 1.6s ease-in-out infinite;
-
-  @keyframes breathe {
-    0%,
-    100% {
-      opacity: 0.35;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
 
   @keyframes nudge {
     0%,
@@ -95,8 +84,9 @@
   }
 }
 
+/* ^= é "começa com": pega o fundo (preloader) e a logo (preloader-logo). */
 @media (scripting: none) {
-  [data-intro="preloader"] {
+  [data-intro^="preloader"] {
     display: none;
   }
 }

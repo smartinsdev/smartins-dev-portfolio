@@ -6,12 +6,14 @@
  */
 export const INTRO = {
   preloader: "preloader",
+  preloaderLogo: "preloader-logo",
   grid: "grid",
   card: "card",
   titleWord: "title-word",
   subtitle: "subtitle",
   info: "info",
   nav: "nav",
+  navLogo: "nav-logo",
   scrollHint: "scroll-hint",
 } as const;
 

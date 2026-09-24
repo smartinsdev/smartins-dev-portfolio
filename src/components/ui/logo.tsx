@@ -11,6 +11,12 @@ const LETTER_M =
 // Só a área desenhada, sem a moldura preta do arquivo original (320x180).
 const AREA = { x: 36, y: 29, width: 261, height: 122 };
 
+/** Partes da logo que uma animação pode pegar (ex.: o contorno das letras). */
+export type LogoPart = "letter" | "bar" | "dot";
+
+/** Seletor de uma parte: logoPart("dot") -> '[data-logo-part="dot"]'. */
+export const logoPart = (part: LogoPart) => `[data-logo-part="${part}"]`;
+
 type LogoProps = ComponentProps<"svg"> & {
   /**
    * Precisa ser único na página: a máscara e o gradiente são encontrados
@@ -60,6 +66,7 @@ export function Logo({ id, ...props }: LogoProps) {
       <g mask={`url(#${maskId})`}>
         {/* A barra do "$" passa por trás do S e só aparece fora dele. */}
         <rect
+          data-logo-part="bar"
           x="82.5"
           y="30.5"
           width="11"
@@ -70,11 +77,22 @@ export function Logo({ id, ...props }: LogoProps) {
         />
         {/* Traço de 8 centrado na borda, com a metade de dentro escondida
             pela máscara: sobra um contorno de 4 só por fora, como no Figma. */}
-        <path d={LETTER_S} stroke={c.fg} strokeWidth="8" />
-        <path d={LETTER_M} stroke={c.fg} strokeWidth="8" />
+        <path
+          data-logo-part="letter"
+          d={LETTER_S}
+          stroke={c.fg}
+          strokeWidth="8"
+        />
+        <path
+          data-logo-part="letter"
+          d={LETTER_M}
+          stroke={c.fg}
+          strokeWidth="8"
+        />
       </g>
 
       <ellipse
+        data-logo-part="dot"
         cx="281"
         cy="125.5"
         rx="13.5"
