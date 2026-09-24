@@ -58,7 +58,7 @@ export default async function OpengraphImage({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: c.ink900,
+        backgroundColor: c.pageDark,
         backgroundImage: [
           `radial-gradient(circle at 0% 35%, ${alpha(c.ts, 0.3)}, transparent 55%)`,
           `radial-gradient(circle at 100% 75%, ${alpha(c.node, 0.22)}, transparent 50%)`,

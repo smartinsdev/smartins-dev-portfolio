@@ -45,7 +45,7 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: themeColors.ink900,
+  themeColor: themeColors.pageDark,
   colorScheme: "dark",
 };
 
