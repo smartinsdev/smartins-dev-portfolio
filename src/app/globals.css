@@ -1,19 +1,71 @@
 @import "tailwindcss";
 
+/* Tema. light-dark(claro, escuro) escolhe um dos dois valores pelo
+   color-scheme do elemento. No :root, "light dark" deixa o navegador
+   decidir pelo sistema operacional: é o tema "Sistema", só com CSS.
+   Com data-theme no <html> (posto pelo script do layout, ver
+   src/theme/theme-script.ts), só um lado vale. */
+:root {
+  color-scheme: light dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Variantes para o que não é cor (mostrar uma imagem ou outra, trocar
+   uma sombra). A dark: de fábrica do Tailwind só olha o sistema; estas
+   duas seguem a mesma regra do color-scheme: escolha forçada primeiro,
+   sistema depois. @slot é onde entra a classe (ex.: light:hidden). */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant light {
+  &:where([data-theme="light"], [data-theme="light"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: light) {
+    &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
+      @slot;
+    }
+  }
+}
+
 @theme {
-  --color-ink-950: #04070e;
-  --color-ink-900: #070c17;
-  --color-ink-800: #0c1424;
-  --color-ink-700: #14203a;
-  --color-line: #1e2b45;
-  --color-fg: #f3f6fb;
-  --color-fg-muted: #93a1b8;
+  /* Cores de marca: iguais nos dois temas. */
   --color-ts: #3178c6;
   --color-ts-light: #6aa8f5;
   --color-react: #61dafb;
   --color-node: #5fa04e;
   --color-node-light: #8cc84b;
   --color-node-lighter: #a6db6c;
+
+  /* Cores de papel: light-dark(claro, escuro). Todo texto passa AAA
+     (7:1) nos dois temas, medido na tela contra o pior pixel do fundo
+     (pontinhos, brilhos e colagem incluídos), não só contra a cor lisa. */
+  --color-page: light-dark(#f4f7fb, #070c17);
+  --color-surface: light-dark(#ffffff, #0c1424);
+  --color-line: light-dark(#d9e1ec, #1e2b45);
+  --color-fg: light-dark(#0b1220, #f3f6fb);
+  --color-fg-muted: light-dark(#3b475a, #adb8c9);
+  --color-highlight: light-dark(#085975, #61dafb);
+  /* Degradê do subtítulo: um tom mais fechado no claro e mais aberto no
+     escuro que as cores de marca, para passar 7:1 em cima da colagem. */
+  --color-gradient-from: light-dark(#164581, #8ebdf7);
+  --color-gradient-via: light-dark(#074c64, #61dafb);
+  --color-gradient-to: light-dark(#205019, #8fca50);
 
   --animate-nudge: nudge 1.6s ease-in-out infinite;
 
@@ -34,24 +86,32 @@
   --font-mono: var(--font-mono-family), ui-monospace, monospace;
   --color-accent: var(--color-node-light);
   --color-accent-strong: var(--color-node-lighter);
-  --color-accent-foreground: var(--color-ink-950);
+  /* Texto do botão: escuro nos dois temas (10:1 sobre o verde). */
+  --color-accent-foreground: #04070e;
 }
+
 @utility bg-stack-glow {
-  background-color: var(--color-ink-900);
+  background-color: var(--color-page);
   background-image:
     radial-gradient(
       55% 45% at 0% 35%,
-      color-mix(in oklab, var(--color-ts) 24%, transparent),
+      light-dark(
+        color-mix(in oklab, var(--color-ts) 14%, transparent),
+        color-mix(in oklab, var(--color-ts) 24%, transparent)
+      ),
       transparent
     ),
     radial-gradient(
       50% 40% at 100% 75%,
-      color-mix(in oklab, var(--color-node) 16%, transparent),
+      light-dark(
+        color-mix(in oklab, var(--color-node) 12%, transparent),
+        color-mix(in oklab, var(--color-node) 16%, transparent)
+      ),
       transparent
     ),
     radial-gradient(
       circle at 1px 1px,
-      rgb(255 255 255 / 0.05) 1px,
+      light-dark(rgb(11 18 32 / 0.06), rgb(255 255 255 / 0.05)) 1px,
       transparent 0
     );
   background-size:
@@ -59,16 +119,32 @@
     auto,
     28px 28px;
 }
+
+/* Sombra atrás do título: escura no escuro, halo claro no claro. */
 @utility title-glow {
   text-shadow:
-    0 2px 4px rgb(4 7 14 / 0.5),
-    0 8px 40px rgb(4 7 14 / 0.85),
-    0 0 90px color-mix(in oklab, var(--color-ts) 40%, transparent);
+    0 2px 4px light-dark(rgb(255 255 255 / 0.7), rgb(4 7 14 / 0.5)),
+    0 8px 40px light-dark(rgb(244 247 251 / 0.95), rgb(4 7 14 / 0.85)),
+    0 0 90px
+    light-dark(
+      color-mix(in oklab, var(--color-ts) 22%, transparent),
+      color-mix(in oklab, var(--color-ts) 40%, transparent)
+    );
+}
+
+/* Almofada atrás do subtítulo: halo claro no claro, sombra escura no
+   escuro. Três camadas, da mais justa à mais larga: a de 2px cola na
+   letra e é a que garante o 7:1 quando uma linha colorida dos cards passa
+   bem atrás; as outras duas apagam o resto da colagem em volta. */
+@utility subtitle-glow {
+  filter: drop-shadow(0 0 2px light-dark(#ffffff, rgb(4 7 14)))
+    drop-shadow(0 0 8px light-dark(#ffffff, rgb(4 7 14 / 0.9)))
+    drop-shadow(0 0 20px light-dark(#f4f7fb, rgb(4 7 14 / 0.95)));
 }
 
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--color-react);
+    outline: 2px solid var(--color-highlight);
     outline-offset: 4px;
   }
 
@@ -76,6 +152,23 @@
     background-color: color-mix(in oklab, var(--color-ts) 55%, transparent);
     color: var(--color-fg);
   }
+}
+
+/* Troca de tema (src/theme/fade-theme-change.ts): a View Transitions API
+   tira uma "foto" da página com o tema velho e faz um cross-fade para o
+   novo. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 250ms;
+}
+
+/* Durante a troca, nenhuma transição CSS roda. Sem isto, cada link com
+   transition-colors desbotaria no seu próprio ritmo. */
+[data-theme-switching] *,
+[data-theme-switching] *::before,
+[data-theme-switching] *::after {
+  /* biome-ignore lint/complexity/noImportantStyles: precisa vencer as classes transition-* dos componentes */
+  transition: none !important;
 }
 
 @media (scripting: enabled) {

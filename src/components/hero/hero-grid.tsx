@@ -7,7 +7,7 @@ export function HeroGrid({ cards }: { cards: HeroCardData[] }) {
   return (
     <div
       data-intro={INTRO.grid}
-      className={`${styles.grid} aspect-3/4 w-full rounded-xl bg-ink-800 p-[clamp(0.5rem,1.2cqi,1.25rem)] ring-1 ring-line md:aspect-video`}
+      className={`${styles.grid} aspect-3/4 w-full rounded-xl bg-surface p-[clamp(0.5rem,1.2cqi,1.25rem)] ring-1 ring-line md:aspect-video`}
     >
       {cards.map((card) => (
         <HeroCard key={card.src} card={card} />

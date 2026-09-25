@@ -22,10 +22,12 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
+  /* Névoa atrás do título: escura no escuro, clara no claro. É a
+     primeira camada de proteção do subtítulo; o subtitle-glow completa. */
   background: radial-gradient(
     ellipse 62% 48% at center,
-    rgb(4 7 14 / 0.72),
-    rgb(4 7 14 / 0.3) 60%,
+    light-dark(rgb(244 247 251 / 0.9), rgb(4 7 14 / 0.8)),
+    light-dark(rgb(244 247 251 / 0.45), rgb(4 7 14 / 0.38)) 60%,
     transparent
   );
 }

@@ -17,6 +17,12 @@ export const ptBr = {
   preferences: {
     open: "Preferências",
     language: "Idioma",
+    theme: "Tema",
+    themes: {
+      system: "Sistema",
+      light: "Claro",
+      dark: "Escuro",
+    },
   },
   hero: {
     role: "Desenvolvedor Full Stack",

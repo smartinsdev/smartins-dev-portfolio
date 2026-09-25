@@ -25,9 +25,9 @@ export async function HeroTitle() {
       </h1>
       <p
         data-intro={INTRO.subtitle}
-        className="mt-[clamp(0.75rem,1.6cqi,1.75rem)] text-[clamp(1.125rem,2.6cqi,2.75rem)] font-medium tracking-[-0.01em] drop-shadow-[0_2px_18px_rgb(4_7_14/0.95)]"
+        className="mt-[clamp(0.75rem,1.6cqi,1.75rem)] text-[clamp(1.125rem,2.6cqi,2.75rem)] font-medium tracking-[-0.01em] subtitle-glow"
       >
-        <span className="bg-linear-to-r from-ts-light via-react to-node-light bg-clip-text text-transparent">
+        <span className="bg-linear-to-r from-gradient-from via-gradient-via to-gradient-to bg-clip-text text-transparent">
           {dict.hero.role}
         </span>
       </p>

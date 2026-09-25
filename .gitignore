@@ -39,6 +39,7 @@ yarn-error.log*
 # AI
 /.claude
 /.agents
+/.superpowers
 skills-lock.json
 
 # typescript

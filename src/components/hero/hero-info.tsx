@@ -43,7 +43,7 @@ export async function HeroInfo() {
               href={social.href}
               target="_blank"
               rel="noreferrer"
-              className="group inline-flex min-h-11 items-center gap-[0.4em] text-fg-muted transition-colors duration-200 hover:text-react md:min-h-0 md:py-[0.3em]"
+              className="group inline-flex min-h-11 items-center gap-[0.4em] text-fg-muted transition-colors duration-200 hover:text-highlight"
             >
               {social.label}
               <span

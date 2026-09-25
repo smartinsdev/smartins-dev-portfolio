@@ -16,6 +16,12 @@ export const en: Dictionary = {
   preferences: {
     open: "Preferences",
     language: "Language",
+    theme: "Theme",
+    themes: {
+      system: "System",
+      light: "Light",
+      dark: "Dark",
+    },
   },
   hero: {
     role: "Full Stack Developer",
