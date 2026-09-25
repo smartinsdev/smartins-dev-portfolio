@@ -43,6 +43,30 @@
   }
 }
 
+/* Modo cinema da seção de Projetos: JS ligado, ninguém pediu menos
+   movimento e tela alta o bastante para o card mais longo caber. Fora
+   disso vale o layout estático, com a seção no fluxo normal.
+   A altura mínima depende da largura: quanto mais estreito o card, mais
+   linhas o texto ocupa. Medido de 280 a 2560px de largura:
+     a partir de 412px (25.75rem): 600px (37.5rem) de altura
+     de 360px (22.5rem) a 411px:   640px (40rem)
+     de 320px (20rem) a 359px:     672px (42rem)
+     abaixo de 320px:              sempre estático
+   A mesma condição está em CINEMA_QUERY (projects-stage.tsx): o CSS
+   monta o layout e o GSAP liga a animação, sempre juntos.
+   Uso: cinema:grid, cinema:h-svh... */
+@custom-variant cinema {
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (
+      min-width: 20rem
+    ) and (
+      (min-height: 42rem) or ((min-width: 22.5rem) and (min-height: 40rem)) or (
+        (min-width: 25.75rem) and (min-height: 37.5rem)
+      )
+    ) {
+    @slot;
+  }
+}
+
 @theme {
   /* Cores de marca: iguais nos dois temas. */
   --color-ts: #3178c6;
