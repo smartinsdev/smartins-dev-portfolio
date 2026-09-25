@@ -120,6 +120,42 @@
     28px 28px;
 }
 
+/* Fundo da seção de Projetos: a mesma família do bg-stack-glow
+   (pontinhos e brilhos de marca), com a luz em outro lugar (ciano do
+   React no alto, azul do TS embaixo à direita) para a troca de fundo
+   ser percebida quando o hero some. O ciano do escuro é 11%, e não
+   mais: com 14%, o "(04)" do título ficava abaixo de 7:1 de 320 a
+   390px, onde o brilho fica mais perto dele. */
+@utility bg-projects-glow {
+  background-color: var(--color-page);
+  background-image:
+    radial-gradient(
+      60% 45% at 50% 0%,
+      light-dark(
+        color-mix(in oklab, var(--color-react) 16%, transparent),
+        color-mix(in oklab, var(--color-react) 11%, transparent)
+      ),
+      transparent
+    ),
+    radial-gradient(
+      50% 40% at 100% 100%,
+      light-dark(
+        color-mix(in oklab, var(--color-ts) 14%, transparent),
+        color-mix(in oklab, var(--color-ts) 24%, transparent)
+      ),
+      transparent
+    ),
+    radial-gradient(
+      circle at 1px 1px,
+      light-dark(rgb(11 18 32 / 0.06), rgb(255 255 255 / 0.05)) 1px,
+      transparent 0
+    );
+  background-size:
+    auto,
+    auto,
+    28px 28px;
+}
+
 /* Sombra atrás do título: escura no escuro, halo claro no claro. */
 @utility title-glow {
   text-shadow:
