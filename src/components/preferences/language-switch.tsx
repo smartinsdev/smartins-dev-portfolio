@@ -6,6 +6,7 @@ import { markIntroPlayed } from "@/components/intro/intro-played";
 import { type Locale, localeInfo, locales } from "@/i18n/locales";
 import { localizePath } from "@/i18n/localize-path";
 import { rememberLocale } from "@/i18n/remember-locale";
+import { isPlainClick } from "@/lib/is-plain-click";
 
 type LanguageSwitchProps = {
   current: Locale;
@@ -39,15 +40,7 @@ export function LanguageSwitch({
     // Ctrl/Cmd/Shift/Alt + clique ou botão do meio: o navegador abre em
     // outra aba ou janela, como em qualquer link. Só o clique simples
     // troca o idioma desta aba.
-    if (
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
-    ) {
-      return;
-    }
+    if (!isPlainClick(event)) return;
 
     event.preventDefault();
     rememberLocale(locale);
