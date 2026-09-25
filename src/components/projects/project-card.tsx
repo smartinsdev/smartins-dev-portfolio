@@ -81,9 +81,11 @@ export async function ProjectCard({ project, index }: ProjectCardProps) {
         >
           {linkText}
           <span className="sr-only">, {name}</span>
+          {/* motion-safe: com "reduzir movimento", a seta não se mexe no
+              hover (WCAG 2.3.3, movimento causado por interação). */}
           <span
             aria-hidden="true"
-            className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            className="transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
           >
             ↗
           </span>

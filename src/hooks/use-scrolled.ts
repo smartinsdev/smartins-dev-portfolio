@@ -1,23 +1,28 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+// Fora do hook: a mesma função a cada render, então o React não desfaz e
+// refaz a inscrição toda vez.
+// O listener é passivo: avisa o navegador que ninguém vai cancelar a
+// rolagem, então ela não espera o JS.
+function subscribe(onChange: () => void) {
+  window.addEventListener("scroll", onChange, { passive: true });
+  return () => window.removeEventListener("scroll", onChange);
+}
+
+const readScrolled = () => window.scrollY > 0;
+
+/** O servidor não sabe a rolagem: o HTML sai como se estivesse no topo. */
+const serverScrolled = () => false;
 
 /**
  * `true` quando a página saiu do topo; volta a `false` no topo.
  *
- * O listener é passivo: avisa o navegador que ninguém vai cancelar a
- * rolagem, então ela não espera o JS. E o React só renderiza de novo
- * quando o valor muda (topo ↔ fora do topo), não a cada evento de scroll.
+ * `useSyncExternalStore` é o jeito do React de ler algo que vive fora
+ * dele (igual ao useTheme). O valor lido é um booleano, então o React só
+ * renderiza de novo quando ele muda (topo ↔ fora do topo), e não a cada
+ * evento de scroll. Se a página abrir já rolada (recarregar, link com
+ * #projects), ele troca para `true` logo depois de hidratar.
  */
 export function useScrolled() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 0);
-    // Já confere na montagem: a página pode abrir no meio (recarregar,
-    // link com #projects).
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
-  }, []);
-
-  return scrolled;
+  return useSyncExternalStore(subscribe, readScrolled, serverScrolled);
 }

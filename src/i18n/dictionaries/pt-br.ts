@@ -32,8 +32,10 @@ export const ptBr = {
   },
   projects: {
     title: "Projetos",
-    // A segunda parte ganha o degradê do subtítulo do hero.
-    headline: ["Do rascunho ao", "deploy"],
+    // A segunda parte ganha o degradê do subtítulo do hero. O tipo é uma
+    // tupla (exatamente duas partes, com nome): sem ele seria string[], e
+    // uma frase de uma parte só passaria sem erro no en.ts.
+    headline: ["Do rascunho ao", "deploy"] as [lead: string, highlight: string],
     stack: "Tecnologias",
     ongoing: "Em andamento",
     viewSite: "Ver site",

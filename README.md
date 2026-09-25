@@ -92,7 +92,7 @@ A altura mínima do modo cinema depende da largura, porque quanto mais estreito 
 
 Esses valores foram medidos de 280 a 2560px de largura e deixam pelo menos 16px livres embaixo do card mais longo. Ao mudar um texto ou um tamanho dos cards, meça de novo: abra a página já no tamanho (sem só redimensionar a janela) e confira que o card mais alto não passa do pé da tela.
 
-A condição do modo cinema está escrita em dois lugares, e os dois precisam ser iguais: a variante `cinema` no `globals.css` e o `CINEMA_QUERY` no `projects-stage.tsx`.
+A condição do modo cinema está escrita em dois lugares, e os dois precisam ser iguais: a variante `cinema` no `globals.css` e o `CINEMA_QUERY` no `src/animations/cinema-query.ts`. O `pnpm test` falha se forem diferentes.
 
 ## Estrutura
 

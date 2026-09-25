@@ -39,8 +39,10 @@ export function linkToProjects(stage: HTMLElement, tl: gsap.core.Timeline) {
     if (!event.target.closest(`a[href="${HASH}"]`)) return;
 
     event.preventDefault();
-    // O que a âncora faria: o #projects na URL (e no histórico)...
-    history.pushState(null, "", HASH);
+    // O que a âncora faria: o #projects na URL (e no histórico)... Só se
+    // ainda não estiver lá: a âncora de verdade também não repete a
+    // entrada, e o "Voltar" tem que sair de #projects na primeira vez.
+    if (location.hash !== HASH) history.pushState(null, "", HASH);
     // ...e o foco na seção, para quem usa teclado ou leitor de tela.
     // preventScroll: quem rola é a linha de baixo, com animação.
     title.focus({ preventScroll: true });

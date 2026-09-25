@@ -1,4 +1,8 @@
-@import "tailwindcss";
+/* source("../"): o Tailwind procura classes só em src/ (o caminho é
+   relativo a este arquivo). Sem isso ele lê o projeto inteiro, inclusive
+   os .md de docs/ e o README, e gera CSS para classes que só aparecem
+   nos textos. */
+@import "tailwindcss" source("../");
 
 /* Tema. light-dark(claro, escuro) escolhe um dos dois valores pelo
    color-scheme do elemento. No :root, "light dark" deixa o navegador
@@ -54,8 +58,9 @@
      abaixo de 320px:              sempre estático
    Cada altura deixa pelo menos 16px livres embaixo do card mais longo.
    Mudou um texto ou um tamanho dos cards? Meça de novo.
-   A mesma condição está em CINEMA_QUERY (projects-stage.tsx): o CSS
-   monta o layout e o GSAP liga a animação, sempre juntos.
+   A mesma condição está em CINEMA_QUERY (animations/cinema-query.ts): o
+   CSS monta o layout e o GSAP liga a animação, sempre juntos. O
+   cinema-query.test.ts confere que as duas são iguais.
    Uso: cinema:grid, cinema:h-svh... */
 @custom-variant cinema {
   @media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (

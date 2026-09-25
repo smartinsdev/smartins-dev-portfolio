@@ -2,18 +2,11 @@
 
 import type { ReactNode } from "react";
 import { useLayoutEffect, useRef } from "react";
+import { CINEMA_QUERY } from "@/animations/cinema-query";
 import { followFocus, linkToProjects } from "@/animations/projects-focus";
 import { keepPlaceAcrossLayouts } from "@/animations/projects-place";
 import { createProjectsScroll } from "@/animations/projects-scroll";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
-
-/**
- * Mesma condição da variante `cinema:` do globals.css. O CSS monta o
- * layout e o matchMedia liga a animação: os dois mudam juntos, até se a
- * pessoa mudar a preferência com a página aberta.
- */
-const CINEMA_QUERY =
-  "(scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-width: 20rem) and ((min-height: 44.5rem) or ((min-width: 22.5rem) and (min-height: 41rem)) or ((min-width: 25.75rem) and (min-height: 40rem)))";
 
 // Scroll de quando o palco foi desmontado (troca de idioma: a página é
 // montada de novo sem recarregar). Variável de módulo, então sobrevive.

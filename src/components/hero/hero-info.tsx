@@ -48,7 +48,7 @@ export async function HeroInfo() {
               {social.label}
               <span
                 aria-hidden="true"
-                className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                className="transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
               >
                 ↗
               </span>
