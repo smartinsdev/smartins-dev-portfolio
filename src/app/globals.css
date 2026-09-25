@@ -1,4 +1,8 @@
-@import "tailwindcss";
+/* source("../"): o Tailwind procura classes só em src/ (o caminho é
+   relativo a este arquivo). Sem isso ele lê o projeto inteiro, inclusive
+   os .md de docs/ e o README, e gera CSS para classes que só aparecem
+   nos textos. */
+@import "tailwindcss" source("../");
 
 /* Tema. light-dark(claro, escuro) escolhe um dos dois valores pelo
    color-scheme do elemento. No :root, "light dark" deixa o navegador
@@ -40,6 +44,33 @@
     &:where(:root:not([data-theme]), :root:not([data-theme]) *) {
       @slot;
     }
+  }
+}
+
+/* Modo cinema da seção de Projetos: JS ligado, ninguém pediu menos
+   movimento e tela alta o bastante para o card mais longo caber. Fora
+   disso vale o layout estático, com a seção no fluxo normal.
+   A altura mínima depende da largura: quanto mais estreito o card, mais
+   linhas o texto ocupa. Medido de 280 a 2560px de largura:
+     a partir de 412px (25.75rem): 640px (40rem) de altura
+     de 360px (22.5rem) a 411px:   656px (41rem)
+     de 320px (20rem) a 359px:     712px (44.5rem)
+     abaixo de 320px:              sempre estático
+   Cada altura deixa pelo menos 16px livres embaixo do card mais longo.
+   Mudou um texto ou um tamanho dos cards? Meça de novo.
+   A mesma condição está em CINEMA_QUERY (animations/cinema-query.ts): o
+   CSS monta o layout e o GSAP liga a animação, sempre juntos. O
+   cinema-query.test.ts confere que as duas são iguais.
+   Uso: cinema:grid, cinema:h-svh... */
+@custom-variant cinema {
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (
+      min-width: 20rem
+    ) and (
+      (min-height: 44.5rem) or (
+        (min-width: 22.5rem) and (min-height: 41rem)
+      ) or ((min-width: 25.75rem) and (min-height: 40rem))
+    ) {
+    @slot;
   }
 }
 
@@ -106,6 +137,42 @@
       light-dark(
         color-mix(in oklab, var(--color-node) 12%, transparent),
         color-mix(in oklab, var(--color-node) 16%, transparent)
+      ),
+      transparent
+    ),
+    radial-gradient(
+      circle at 1px 1px,
+      light-dark(rgb(11 18 32 / 0.06), rgb(255 255 255 / 0.05)) 1px,
+      transparent 0
+    );
+  background-size:
+    auto,
+    auto,
+    28px 28px;
+}
+
+/* Fundo da seção de Projetos: a mesma família do bg-stack-glow
+   (pontinhos e brilhos de marca), com a luz em outro lugar (ciano do
+   React no alto, azul do TS embaixo à direita) para a troca de fundo
+   ser percebida quando o hero some. O ciano do escuro é 11%, e não
+   mais: com 14%, o "(04)" do título ficava abaixo de 7:1 de 320 a
+   390px, onde o brilho fica mais perto dele. */
+@utility bg-projects-glow {
+  background-color: var(--color-page);
+  background-image:
+    radial-gradient(
+      60% 45% at 50% 0%,
+      light-dark(
+        color-mix(in oklab, var(--color-react) 16%, transparent),
+        color-mix(in oklab, var(--color-react) 11%, transparent)
+      ),
+      transparent
+    ),
+    radial-gradient(
+      50% 40% at 100% 100%,
+      light-dark(
+        color-mix(in oklab, var(--color-ts) 14%, transparent),
+        color-mix(in oklab, var(--color-ts) 24%, transparent)
       ),
       transparent
     ),
