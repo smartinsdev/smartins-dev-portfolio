@@ -78,7 +78,7 @@ export function linkToProjects(stage: HTMLElement, tl: gsap.core.Timeline) {
  * do palco impede o navegador de rolar para o lado sozinho: sem isto, o
  * Tab iria para um card fora da tela.
  *
- * Devolve a limpeza do listener.
+ * Devolve a limpeza dos listeners.
  */
 export function followFocus(stage: HTMLElement, tl: gsap.core.Timeline) {
   const st = tl.scrollTrigger;
@@ -87,8 +87,20 @@ export function followFocus(stage: HTMLElement, tl: gsap.core.Timeline) {
   const cards = gsap.utils.toArray<HTMLElement>(target(PROJECTS.card), stage);
   if (!st || !hero || cards.length === 0) return () => {};
 
+  // Ao sair da janela (outra aba, Alt+Tab), o foco "sai" e, na volta,
+  // "entra" de novo no mesmo elemento. Esse retorno não pode rolar a
+  // página: a pessoa pode ter rolado para longe do elemento (Espaço,
+  // PageDown) antes de sair.
+  let returningTo: Element | null = null;
+  const onWindowBlur = () => {
+    returningTo = document.activeElement;
+  };
+
   const onFocusIn = (event: FocusEvent) => {
     const element = event.target;
+    const isReturn = element === returningTo;
+    returningTo = null;
+    if (isReturn) return;
     // Só foco de teclado (:focus-visible). O clique do mouse também foca
     // o link, e a página não pode pular antes de ele abrir.
     if (!(element instanceof Element) || !element.matches(":focus-visible")) {
@@ -123,6 +135,10 @@ export function followFocus(stage: HTMLElement, tl: gsap.core.Timeline) {
     window.scrollTo({ top, behavior: "instant" });
   };
 
+  window.addEventListener("blur", onWindowBlur);
   stage.addEventListener("focusin", onFocusIn);
-  return () => stage.removeEventListener("focusin", onFocusIn);
+  return () => {
+    window.removeEventListener("blur", onWindowBlur);
+    stage.removeEventListener("focusin", onFocusIn);
+  };
 }

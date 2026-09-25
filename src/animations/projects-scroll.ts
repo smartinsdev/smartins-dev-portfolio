@@ -14,16 +14,20 @@ export const PHASE = {
 } as const;
 
 /**
- * Quanto scroll, em alturas de tela, as fases reveal e rise usam juntas.
- * O slide usa, além disso, a distância real que a fileira anda.
+ * Tamanho do scroll da passagem inteira: INTRO_SCREENS alturas de tela
+ * mais a distância que a fileira anda (ver o `end` abaixo). Quanto maior,
+ * mais devagar tudo acontece.
  */
 const INTRO_SCREENS = 1.5;
 
 /**
- * Durações em "unidades" da timeline. Com scrub, o tempo vira distância
- * de scroll: o que vale é a proporção entre elas. Com estes números, numa
- * tela comum, a fileira anda perto de 1px por pixel rolado. Se o slide
- * parecer rápido ou lento, mexa em `slide`.
+ * Durações em "unidades" da timeline. Com scrub, o relógio não conta: a
+ * timeline inteira é espalhada pelo scroll do `end`, e cada fase ganha uma
+ * fatia do tamanho da sua duração. Aqui: reveal 1 + rise 0.92 (0.6 mais
+ * 4 × 0.08 de stagger, com título e 4 cards) + slide 1 + respiro 0.15 =
+ * 3.07. O slide fica com 1/3.07 do scroll: no desktop a fileira anda perto
+ * de 1px por pixel rolado; no celular, onde ela anda mais, um pouco mais
+ * rápido. Para mudar o ritmo de uma fase, mude a duração dela.
  */
 const DURATION = { reveal: 1, rise: 0.6, stagger: 0.08, slide: 1, rest: 0.15 };
 

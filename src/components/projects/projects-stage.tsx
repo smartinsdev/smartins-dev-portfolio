@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { useLayoutEffect, useRef } from "react";
 import { followFocus, linkToProjects } from "@/animations/projects-focus";
+import { keepPlaceAcrossLayouts } from "@/animations/projects-place";
 import { createProjectsScroll } from "@/animations/projects-scroll";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
@@ -38,12 +39,17 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
 
   useGSAP(
     () => {
+      if (!stage.current) return;
+      // A timeline do modo cinema enquanto ele está montado.
+      let cinemaTl: gsap.core.Timeline | null = null;
+
       // matchMedia roda a função só enquanto a condição vale. Se ela
       // deixar de valer (ex.: a pessoa liga "reduzir movimento"), o GSAP
       // desfaz timeline, ScrollTrigger e pin sozinho.
       gsap.matchMedia().add(CINEMA_QUERY, () => {
         if (!stage.current) return;
         const tl = createProjectsScroll(stage.current);
+        cinemaTl = tl;
         const stopLinks = linkToProjects(stage.current, tl);
         const stopFocus = followFocus(stage.current, tl);
 
@@ -72,6 +78,7 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
         // Os listeners não são do GSAP: a função devolvida é a limpeza
         // deles, e o matchMedia chama quando desfaz tudo.
         return () => {
+          cinemaTl = null;
           stopLinks();
           stopFocus();
         };
@@ -81,6 +88,15 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
       // serve mais: sem isto, ligar o modo cinema depois (desligando
       // "reduzir movimento") pularia para um scroll antigo.
       scrollBeforeUnmount = null;
+
+      // Girar o celular ou mudar a preferência troca o layout: a pessoa
+      // continua na mesma parte da página. A função devolvida é a limpeza,
+      // que o useGSAP chama ao desmontar.
+      return keepPlaceAcrossLayouts(
+        stage.current,
+        CINEMA_QUERY,
+        () => cinemaTl,
+      );
     },
     { scope: wrapper },
   );
