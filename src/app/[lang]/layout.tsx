@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { site } from "@/data/site";
@@ -92,6 +93,7 @@ export default async function RootLayout({
       <body className="flex min-h-full flex-col bg-page font-sans text-fg">
         <ThemeSync />
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
