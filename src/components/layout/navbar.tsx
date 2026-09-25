@@ -3,6 +3,7 @@ import { PreferencesMenu } from "@/components/preferences/preferences-menu";
 import { Logo } from "@/components/ui/logo";
 import { site } from "@/data/site";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { NavbarBackdrop } from "./navbar-backdrop";
 
 export async function Navbar() {
   // Promise.all busca os dois ao mesmo tempo, e não um depois do outro.
@@ -10,6 +11,7 @@ export async function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-[clamp(1.25rem,3vw,5rem)] py-[clamp(1rem,2.6svh,2.5rem)]">
+      <NavbarBackdrop />
       {/* Na intro, a logo do preloader voa até aqui e é trocada por esta.
           O header não pode ser animado: a logo mudaria de lugar.
           O link vai para a home do idioma atual, e não para "/", para não
