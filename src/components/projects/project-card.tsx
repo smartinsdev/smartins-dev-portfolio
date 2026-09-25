@@ -19,9 +19,11 @@ export async function ProjectCard({ project, index }: ProjectCardProps) {
       : dict.projects.viewCode;
 
   // No modo cinema a largura vem da tela, e não do texto: ~85% no
-  // celular, ~60% no tablet e ~34% no desktop. Assim a fileira sempre
-  // passa da tela (tem o que andar) e a medida não muda quando as fontes
-  // carregam. O pointer-events-auto religa o clique que a seção desliga.
+  // celular, ~60% no tablet e ~34% a partir de 1280px (entre 1024 e
+  // 1279px, 34% deixaria o card estreito e alto demais para a tela).
+  // Assim a fileira sempre passa da tela (tem o que andar) e a medida não
+  // muda quando as fontes carregam. O pointer-events-auto religa o
+  // clique que a seção desliga.
   //
   // Tamanhos em min(Xvw, 2X·svh): crescem com a largura, como no resto do
   // site, mas param de crescer numa tela mais de 2× mais larga que alta
@@ -30,7 +32,7 @@ export async function ProjectCard({ project, index }: ProjectCardProps) {
   return (
     <li
       data-projects={PROJECTS.card}
-      className="relative flex flex-col rounded-xl bg-surface p-[clamp(1.25rem,min(2.2vw,4.4svh),2.5rem)] ring-1 ring-line transition-colors duration-200 has-[a:focus-visible]:ring-highlight has-[a:hover]:ring-highlight cinema:pointer-events-auto cinema:w-[85vw] cinema:shrink-0 cinema:md:w-[60vw] cinema:lg:w-[34vw]"
+      className="relative flex flex-col rounded-xl bg-surface p-[clamp(1.25rem,min(2.2vw,4.4svh),2.5rem)] ring-1 ring-line transition-colors duration-200 has-[a:focus-visible]:ring-highlight has-[a:hover]:ring-highlight cinema:pointer-events-auto cinema:w-[85vw] cinema:shrink-0 cinema:md:w-[60vw] cinema:xl:w-[34vw]"
     >
       <div className="flex items-baseline justify-between gap-4">
         {/* Decorativo: a ordem já vem do <ol>. */}

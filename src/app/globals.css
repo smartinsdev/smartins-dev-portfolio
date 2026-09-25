@@ -48,10 +48,12 @@
    disso vale o layout estático, com a seção no fluxo normal.
    A altura mínima depende da largura: quanto mais estreito o card, mais
    linhas o texto ocupa. Medido de 280 a 2560px de largura:
-     a partir de 412px (25.75rem): 600px (37.5rem) de altura
-     de 360px (22.5rem) a 411px:   640px (40rem)
-     de 320px (20rem) a 359px:     672px (42rem)
+     a partir de 412px (25.75rem): 640px (40rem) de altura
+     de 360px (22.5rem) a 411px:   656px (41rem)
+     de 320px (20rem) a 359px:     712px (44.5rem)
      abaixo de 320px:              sempre estático
+   Cada altura deixa pelo menos 16px livres embaixo do card mais longo.
+   Mudou um texto ou um tamanho dos cards? Meça de novo.
    A mesma condição está em CINEMA_QUERY (projects-stage.tsx): o CSS
    monta o layout e o GSAP liga a animação, sempre juntos.
    Uso: cinema:grid, cinema:h-svh... */
@@ -59,9 +61,9 @@
   @media (scripting: enabled) and (prefers-reduced-motion: no-preference) and (
       min-width: 20rem
     ) and (
-      (min-height: 42rem) or ((min-width: 22.5rem) and (min-height: 40rem)) or (
-        (min-width: 25.75rem) and (min-height: 37.5rem)
-      )
+      (min-height: 44.5rem) or (
+        (min-width: 22.5rem) and (min-height: 41rem)
+      ) or ((min-width: 25.75rem) and (min-height: 40rem))
     ) {
     @slot;
   }

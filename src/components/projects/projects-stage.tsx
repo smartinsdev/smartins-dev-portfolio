@@ -11,7 +11,7 @@ import { gsap, useGSAP } from "@/lib/gsap";
  * pessoa mudar a preferência com a página aberta.
  */
 const CINEMA_QUERY =
-  "(scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-width: 20rem) and ((min-height: 42rem) or ((min-width: 22.5rem) and (min-height: 40rem)) or ((min-width: 25.75rem) and (min-height: 37.5rem)))";
+  "(scripting: enabled) and (prefers-reduced-motion: no-preference) and (min-width: 20rem) and ((min-height: 44.5rem) or ((min-width: 22.5rem) and (min-height: 41rem)) or ((min-width: 25.75rem) and (min-height: 40rem)))";
 
 /**
  * Palco da passagem do hero para os projetos. Recebe as duas seções por

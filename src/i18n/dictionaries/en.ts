@@ -31,6 +31,7 @@ export const en: Dictionary = {
   },
   projects: {
     title: "Projects",
+    headline: ["From sketch to", "deploy"],
     stack: "Technologies",
     ongoing: "Ongoing",
     viewSite: "View site",

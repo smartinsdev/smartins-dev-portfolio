@@ -32,6 +32,8 @@ export const ptBr = {
   },
   projects: {
     title: "Projetos",
+    // A segunda parte ganha o degradê do subtítulo do hero.
+    headline: ["Do rascunho ao", "deploy"],
     stack: "Tecnologias",
     ongoing: "Em andamento",
     viewSite: "Ver site",

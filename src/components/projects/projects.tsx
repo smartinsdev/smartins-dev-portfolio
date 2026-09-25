@@ -11,6 +11,7 @@ export async function Projects() {
   const dict = await getDictionary();
   // "04": a contagem com dois dígitos, como o número dos cards.
   const count = String(projects.length).padStart(2, "0");
+  const [lead, highlight] = dict.projects.headline;
 
   return (
     // Dois layouts, escolhidos pelo CSS (variante cinema: do globals.css):
@@ -29,24 +30,36 @@ export async function Projects() {
     >
       <div
         data-projects={PROJECTS.heading}
-        className={`flex items-baseline gap-[0.6em] pb-[clamp(1.5rem,4svh,3rem)] ${GUTTER}`}
+        className={`pb-[clamp(1.5rem,4svh,3rem)] ${GUTTER}`}
       >
         {/* tabIndex -1: não entra no Tab, mas pode receber o foco pelo
-            código. O link #projects manda o foco para cá. */}
+            código. O link #projects manda o foco para cá. O leitor de tela
+            lê o título inteiro: "Projetos: Do rascunho ao deploy". */}
         <h2
           id="projects-title"
           tabIndex={-1}
-          className="font-display text-[clamp(2.25rem,min(4.5vw,9svh),4.5rem)] font-semibold leading-none tracking-tight"
+          className="flex flex-col gap-[clamp(0.5rem,1.5svh,1rem)]"
         >
-          {dict.projects.title}
+          {/* Etiqueta: o mesmo nome do link da navbar, para a pessoa saber
+              onde chegou. */}
+          <span className="flex items-baseline gap-[0.6em] font-mono text-[clamp(0.8125rem,min(1vw,2svh),1.125rem)] uppercase tracking-widest text-fg-muted">
+            {dict.projects.title}
+            {/* O <ol> já diz quantos são para o leitor de tela. */}
+            <span aria-hidden="true">({count})</span>
+          </span>
+          <span className="sr-only">: </span>
+          {/* Abaixo de 640px (sm) a fonte segue a largura (9vw, até 36px)
+              para a frase caber numa linha até em 320px: duas linhas
+              roubariam a altura que o modo cinema precisa para os cards.
+              text-balance: se ainda quebrar (fonte maior, outro idioma), as
+              linhas ficam com tamanhos parecidos. */}
+          <span className="font-display text-[clamp(1.75rem,9vw,2.25rem)] font-semibold leading-[1.05] tracking-tight text-balance sm:text-[clamp(2.25rem,min(4.5vw,9svh),4.5rem)]">
+            {lead}{" "}
+            <span className="bg-linear-to-r from-gradient-from via-gradient-via to-gradient-to bg-clip-text text-transparent">
+              {highlight}
+            </span>
+          </span>
         </h2>
-        {/* O <ol> já diz quantos são para o leitor de tela. */}
-        <span
-          aria-hidden="true"
-          className="font-mono text-[clamp(0.875rem,min(1.1vw,2.2svh),1.375rem)] text-fg-muted"
-        >
-          ({count})
-        </span>
       </div>
 
       <ol
