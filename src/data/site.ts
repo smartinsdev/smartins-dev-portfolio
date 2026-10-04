@@ -5,6 +5,7 @@ export const site = {
   // #about). Os rótulos ficam nos dicionários (src/i18n/dictionaries).
   nav: ["projects", "about", "contact"],
   ctaHref: "#projects",
+  email: "smartinsdev@outlook.com",
   socials: [
     { label: "GitHub", href: "https://github.com/smartinsdev" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/smartins-dev" },

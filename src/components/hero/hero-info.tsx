@@ -1,5 +1,6 @@
 import { INTRO } from "@/animations/intro-targets";
 import { ButtonLink } from "@/components/ui/button-link";
+import { SocialLinks } from "@/components/ui/social-links";
 import { StatusDot } from "@/components/ui/status-dot";
 import { site } from "@/data/site";
 import { getDictionary } from "@/i18n/get-dictionary";
@@ -33,30 +34,10 @@ export async function HeroInfo() {
         <ButtonLink href={site.ctaHref}>{dict.hero.cta}</ButtonLink>
       </div>
 
-      <ul
+      <SocialLinks
         data-intro={INTRO.info}
         className="flex justify-center gap-6 font-mono text-[clamp(0.875rem,1.4cqi,1.375rem)] uppercase tracking-widest md:flex-col md:items-end md:gap-0"
-      >
-        {site.socials.map((social) => (
-          <li key={social.href}>
-            <a
-              href={social.href}
-              target="_blank"
-              rel="noreferrer"
-              className="group inline-flex min-h-11 items-center gap-[0.4em] text-fg-muted transition-colors duration-200 hover:text-highlight"
-            >
-              {social.label}
-              <span
-                aria-hidden="true"
-                className="transition-transform duration-200 motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5"
-              >
-                ↗
-              </span>
-              <span className="sr-only">{dict.hero.newTab}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      />
     </div>
   );
 }

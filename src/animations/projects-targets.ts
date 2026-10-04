@@ -17,6 +17,14 @@ export const PROJECTS = {
   card: "card",
 } as const;
 
+/**
+ * Classe que o palco ganha enquanto está fixado na tela (pin). A variante
+ * `stage-pinned:` do globals.css procura por ela: o CSS não importa
+ * TypeScript, então o nome existe nos dois lugares, e o
+ * projects-targets.test.ts confere que são iguais.
+ */
+export const PINNED_CLASS = "projects-pinned";
+
 export type ProjectsTarget = (typeof PROJECTS)[keyof typeof PROJECTS];
 
 export const target = (name: ProjectsTarget) => `[data-projects="${name}"]`;

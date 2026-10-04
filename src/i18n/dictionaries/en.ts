@@ -59,6 +59,21 @@ export const en: Dictionary = {
       },
     },
   },
+  contact: {
+    title: "Contact",
+    headline: ["Got a project in mind?", "Let’s talk."],
+    emailSubject: "Contact from your portfolio",
+    copy: "Copy email",
+    copied: "Email copied",
+    copyFailed: "Couldn’t copy. Select the email and copy it by hand.",
+    status: "Status",
+    location: "Based in",
+    locationValue: "Brazil · UTC−3",
+    socials: "Elsewhere",
+  },
+  footer: {
+    backToTop: "Back to top",
+  },
   notFound: {
     title: "Page not found",
     description: "This address may have changed or never existed.",

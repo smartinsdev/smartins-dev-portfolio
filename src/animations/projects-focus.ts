@@ -1,4 +1,4 @@
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { isPlainClick } from "@/lib/is-plain-click";
 import { measureTravel, PHASE } from "./projects-scroll";
 import { PROJECTS, target } from "./projects-targets";
@@ -16,7 +16,9 @@ let initialHashHandled = false;
  * No modo cinema, a seção de Projetos fica em cima do hero, no topo do
  * palco: o pulo normal da âncora #projects iria para o topo da página e
  * nada aconteceria. Aqui, os links para #projects e o #projects no
- * endereço levam ao ponto em que os cards acabaram de chegar.
+ * endereço levam ao ponto em que os cards acabaram de chegar. Uma âncora
+ * de seção depois do palco (#contact) no endereço também é refeita,
+ * porque o pin empurra a seção para baixo.
  *
  * Devolve a limpeza dos listeners.
  */
@@ -51,18 +53,39 @@ export function linkToProjects(stage: HTMLElement, tl: gsap.core.Timeline) {
   };
   document.addEventListener("click", onClick);
 
-  // Chegou com #projects no endereço: vai direto para os cards. Espera o
-  // "load" porque o ScrollTrigger refaz as medidas nessa hora. A marca de
-  // "já li o endereço" só muda quando a leitura acontece de verdade: em
+  // Chegou com uma âncora no endereço. Espera o "load" porque o
+  // ScrollTrigger refaz as medidas nessa hora. A marca de "já li o
+  // endereço" só muda quando a leitura acontece de verdade: em
   // desenvolvimento, o React monta e desmonta os efeitos uma vez a mais
   // (StrictMode), e a limpeza tira o listener antes do "load".
   const handleInitialHash = () => {
     initialHashHandled = true;
-    if (location.hash !== HASH) return;
-    // seek: põe a agulha no label na hora. Sem isso, o scrub levaria 1s
-    // para alcançar o scroll e a pessoa veria a transição passar.
-    tl.seek(PHASE.slide);
-    window.scrollTo({ top: cardsTop(), behavior: "instant" });
+    if (location.hash === HASH) {
+      // #projects: vai direto para os cards. seek põe a agulha no label na
+      // hora. Sem isso, o scrub levaria 1s para alcançar o scroll e a
+      // pessoa veria a transição passar.
+      tl.seek(PHASE.slide);
+      window.scrollTo({ top: cardsTop(), behavior: "instant" });
+      return;
+    }
+    // Âncora de uma seção depois do palco (ex.: #contact). O navegador
+    // pulou até ela antes de o pin existir; quando o pin cria o espaço
+    // dele, a seção desce, e a pessoa ficaria no meio da passagem dos
+    // Projetos. Aqui ela vai de novo até a seção, já no lugar certo.
+    // Sem decodeURIComponent: os ids do site são ASCII, e ele lançaria
+    // erro com um endereço malformado (ex.: "#%").
+    const anchor = location.hash
+      ? document.getElementById(location.hash.slice(1))
+      : null;
+    if (anchor && !stage.contains(anchor)) {
+      // Quando a página já carregou antes de o React montar o palco (o
+      // comum em produção), isto roda logo depois de o pin ser criado, e o
+      // GSAP ainda não mediu o espaço dele: a primeira medida fica para o
+      // próximo quadro. refresh() mede tudo agora, como na troca de idioma
+      // (projects-stage.tsx).
+      ScrollTrigger.refresh();
+      anchor.scrollIntoView({ block: "start", behavior: "instant" });
+    }
   };
   if (!initialHashHandled) {
     if (document.readyState === "complete") handleInitialHash();

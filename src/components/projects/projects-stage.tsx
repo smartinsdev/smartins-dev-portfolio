@@ -6,6 +6,7 @@ import { CINEMA_QUERY } from "@/animations/cinema-query";
 import { followFocus, linkToProjects } from "@/animations/projects-focus";
 import { keepPlaceAcrossLayouts } from "@/animations/projects-place";
 import { createProjectsScroll } from "@/animations/projects-scroll";
+import { PINNED_CLASS } from "@/animations/projects-targets";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
 // Scroll de quando o palco foi desmontado (troca de idioma: a página é
@@ -70,10 +71,13 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
 
         // Os listeners não são do GSAP: a função devolvida é a limpeza
         // deles, e o matchMedia chama quando desfaz tudo.
+        // A classe do pin também sai aqui: se o modo cinema for desligado
+        // no meio do pin, ninguém mais tiraria ela do palco.
         return () => {
           cinemaTl = null;
           stopLinks();
           stopFocus();
+          stage.current?.classList.remove(PINNED_CLASS);
         };
       });
       // O add() acima roda na hora quando a condição vale, e aí já usou o
@@ -85,7 +89,9 @@ export function ProjectsStage({ children }: { children: ReactNode }) {
       // Girar o celular ou mudar a preferência troca o layout: a pessoa
       // continua na mesma parte da página. A função devolvida é a limpeza,
       // que o useGSAP chama ao desmontar.
+      if (!wrapper.current) return;
       return keepPlaceAcrossLayouts(
+        wrapper.current,
         stage.current,
         CINEMA_QUERY,
         () => cinemaTl,

@@ -1,11 +1,8 @@
 import { PROJECTS } from "@/animations/projects-targets";
+import { GUTTER } from "@/components/layout/gutter";
 import { projects } from "@/data/projects";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { ProjectCard } from "./project-card";
-
-// Margem lateral igual à da navbar: o título e o primeiro card ficam
-// alinhados com a logo.
-const GUTTER = "px-[clamp(1.25rem,3vw,5rem)]";
 
 export async function Projects() {
   const dict = await getDictionary();

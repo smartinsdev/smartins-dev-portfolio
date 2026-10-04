@@ -3,6 +3,7 @@ import { PreferencesMenu } from "@/components/preferences/preferences-menu";
 import { Logo } from "@/components/ui/logo";
 import { site } from "@/data/site";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { GUTTER } from "./gutter";
 import { NavbarBackdrop } from "./navbar-backdrop";
 
 export async function Navbar() {
@@ -10,7 +11,9 @@ export async function Navbar() {
   const [locale, dict] = await Promise.all([getLocale(), getDictionary()]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-[clamp(1.25rem,3vw,5rem)] py-[clamp(1rem,2.6svh,2.5rem)]">
+    <header
+      className={`fixed inset-x-0 top-0 z-40 flex items-center justify-between py-[clamp(1rem,2.6svh,2.5rem)] ${GUTTER}`}
+    >
       <NavbarBackdrop />
       {/* Na intro, a logo do preloader voa até aqui e é trocada por esta.
           O header não pode ser animado: a logo mudaria de lugar.

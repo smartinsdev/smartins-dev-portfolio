@@ -74,6 +74,15 @@
   }
 }
 
+/* Enquanto o palco dos Projetos está fixado na tela (pin), nada rola por
+   baixo da navbar. O ScrollTrigger põe a classe no palco nesse intervalo
+   (toggleClass em animations/projects-scroll.ts); o nome dela é o
+   PINNED_CLASS de animations/projects-targets.ts, e o
+   projects-targets.test.ts confere que os dois são iguais.
+   :has() olha a página inteira, então funciona fora do palco (na navbar).
+   Uso: stage-pinned:opacity-0. */
+@custom-variant stage-pinned (:root:has(.projects-pinned) &);
+
 @theme {
   /* Cores de marca: iguais nos dois temas. */
   --color-ts: #3178c6;
@@ -187,6 +196,40 @@
     28px 28px;
 }
 
+/* Fundo do Contato: a mesma família dos outros dois. O azul do TS no
+   alto à direita continua o brilho que os Projetos têm embaixo à
+   direita, então a emenda entre as seções não aparece. O verde do Node
+   fica embaixo, no centro, atrás da logo que fecha a página. */
+@utility bg-contact-glow {
+  background-color: var(--color-page);
+  background-image:
+    radial-gradient(
+      50% 40% at 100% 0%,
+      light-dark(
+        color-mix(in oklab, var(--color-ts) 14%, transparent),
+        color-mix(in oklab, var(--color-ts) 24%, transparent)
+      ),
+      transparent
+    ),
+    radial-gradient(
+      45% 35% at 50% 100%,
+      light-dark(
+        color-mix(in oklab, var(--color-node) 12%, transparent),
+        color-mix(in oklab, var(--color-node) 16%, transparent)
+      ),
+      transparent
+    ),
+    radial-gradient(
+      circle at 1px 1px,
+      light-dark(rgb(11 18 32 / 0.06), rgb(255 255 255 / 0.05)) 1px,
+      transparent 0
+    );
+  background-size:
+    auto,
+    auto,
+    28px 28px;
+}
+
 /* Sombra atrás do título: escura no escuro, halo claro no claro. */
 @utility title-glow {
   text-shadow:
@@ -213,6 +256,15 @@
   :focus-visible {
     outline: 2px solid var(--color-highlight);
     outline-offset: 4px;
+  }
+
+  /* A navbar é fixa. Quando o Tab leva a página até um link fora da tela,
+     o navegador rola só o necessário, e o link pararia embaixo dela (ex.:
+     Shift+Tab subindo pelo Contato num celular). A margem de rolagem é a
+     mesma folga que as seções deixam no topo para a navbar. Não afeta o
+     modo cinema: lá quem rola até os cards é o projects-focus.ts. */
+  :where(a[href], button) {
+    scroll-margin-top: clamp(5.5rem, 11svh, 8.5rem);
   }
 
   ::selection {
