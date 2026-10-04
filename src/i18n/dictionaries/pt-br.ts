@@ -65,6 +65,29 @@ export const ptBr = {
       },
     },
   },
+  contact: {
+    title: "Contato",
+    // Mesmo formato do headline de Projetos: a segunda parte ganha o
+    // degradê, e aqui vai numa linha só dela.
+    headline: ["Tem um projeto em mente?", "Vamos conversar."] as [
+      lead: string,
+      highlight: string,
+    ],
+    // Assunto que já vem preenchido no e-mail: ajuda a separar as
+    // mensagens que vieram do site.
+    emailSubject: "Contato pelo portfólio",
+    copy: "Copiar e-mail",
+    copied: "E-mail copiado",
+    // O erro diz o que fazer em seguida, e não só o que deu errado.
+    copyFailed: "Não deu para copiar. Selecione o e-mail e copie à mão.",
+    status: "Status",
+    location: "Local",
+    locationValue: "Brasil · UTC−3",
+    socials: "Redes",
+  },
+  footer: {
+    backToTop: "Voltar ao topo",
+  },
   notFound: {
     title: "Página não encontrada",
     description: "O endereço pode ter mudado ou nunca ter existido.",

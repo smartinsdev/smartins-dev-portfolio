@@ -1,5 +1,5 @@
 import { gsap } from "@/lib/gsap";
-import { PROJECTS, target } from "./projects-targets";
+import { PINNED_CLASS, PROJECTS, target } from "./projects-targets";
 import { trackTravel } from "./track-travel";
 
 /**
@@ -85,6 +85,12 @@ export function createProjectsScroll(stage: HTMLElement) {
       anticipatePin: 1,
       // No refresh, recalcula os valores em função (x, y, end).
       invalidateOnRefresh: true,
+      // Põe a classe no palco enquanto o ScrollTrigger está ativo, ou
+      // seja, enquanto o pin segura o palco. A navbar usa para saber se
+      // tem algo rolando por baixo dela (ver navbar-backdrop.tsx). Ao
+      // contrário dos callbacks (onToggle...), o toggleClass também é
+      // aplicado no refresh: abrir a página já no meio do pin funciona.
+      toggleClass: { targets: stage, className: PINNED_CLASS },
     },
   });
 

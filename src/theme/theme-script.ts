@@ -5,9 +5,9 @@ import { THEME_STORAGE_KEY, themes } from "./themes.ts";
 const forcedThemes = themes.filter((theme) => theme !== "system");
 
 /**
- * Script que o layout põe no <head>. O navegador roda ele enquanto lê o
- * HTML, antes de pintar a página: a escolha salva já aparece no primeiro
- * quadro, sem piscar o outro tema. (Num useEffect, só rodaria depois de
+ * Script que o <ThemeScriptTag> põe no <head>. O navegador roda ele
+ * enquanto lê o HTML, antes de pintar a página: a escolha salva já
+ * aparece no primeiro quadro, sem piscar o outro tema. (Num useEffect, só rodaria depois de
  * o React carregar, com a página já pintada.)
  *
  * É texto, não função, porque vai direto para o HTML: por isso é JS

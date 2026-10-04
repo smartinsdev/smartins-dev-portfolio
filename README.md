@@ -1,27 +1,27 @@
 # Sinval Martins — Portfólio
 
-Portfólio pessoal de Sinval Martins, desenvolvedor full stack. A home abre com uma intro animada inspirada no site do GTA VI: a logo é desenhada no preloader e voa até a navbar, uma colagem de cards converge para o centro, o nome entra palavra por palavra e, por último, aparecem os links da navbar e as informações de contato. Rolando a página, o hero diminui e some enquanto o fundo muda, os cards de projetos sobem, e o scroll vertical passa a mover a fileira de cards para o lado.
+Portfólio pessoal de Sinval Martins, desenvolvedor full stack. A home abre com uma intro animada inspirada no site do GTA VI: a logo é desenhada no preloader e voa até a navbar, uma colagem de cards converge para o centro, o nome entra palavra por palavra e, por último, aparecem os links da navbar e as informações de contato. Rolando a página, o hero diminui e some enquanto o fundo muda, os cards de projetos sobem, e o scroll vertical passa a mover a fileira de cards para o lado. A página fecha com o Contato: o e-mail em destaque e, no pé, a mesma logo do preloader, desenhada de novo conforme a pessoa rola até o fim.
 
 O site existe em português e inglês: `/pt-br` e `/en`.
 
 Tem tema claro e escuro: segue o sistema operacional ou a escolha feita no painel de preferências.
 
-> Em construção: hoje a home tem o hero e a seção de Projetos. Veja [o que falta](#o-que-falta).
+> Em construção: hoje a home tem o hero, a seção de Projetos e o Contato. Veja [o que falta](#o-que-falta).
 
 ## Stack
 
 | Ferramenta | Para quê |
 | --- | --- |
 | [Next.js 16](https://nextjs.org) (App Router, Turbopack) | Framework. A página é pré-renderizada como estática. |
-| [React 19](https://react.dev) | Interface. Quase tudo é server component; só a intro, a luz do hero, o palco dos projetos, o fundo da navbar, os seletores de idioma e de tema e as telas de erro rodam no cliente. |
+| [React 19](https://react.dev) | Interface. Quase tudo é server component; só a intro, a luz do hero, o palco dos projetos, o fundo da navbar, o botão de copiar e a logo do Contato, os seletores de idioma e de tema e as telas de erro rodam no cliente. |
 | [TypeScript](https://www.typescriptlang.org) | Tipagem. |
 | [Tailwind CSS v4](https://tailwindcss.com) | Estilos. Cores, fontes e animações ficam como tokens no `@theme` do `globals.css`; cada cor que muda com o tema tem os dois valores em `light-dark()`. |
-| [GSAP](https://gsap.com) + [`@gsap/react`](https://gsap.com/resources/React) | Animações: timeline da intro, desenho da logo (`DrawSVGPlugin`), voo da logo até a navbar (`Flip`), luz que segue o mouse (`quickTo`), passagem do hero para os projetos (`ScrollTrigger`, com `pin` e `scrub`) e versão reduzida para quem ativa "reduzir movimento" (`matchMedia`). |
+| [GSAP](https://gsap.com) + [`@gsap/react`](https://gsap.com/resources/React) | Animações: timeline da intro, desenho da logo (`DrawSVGPlugin`), voo da logo até a navbar (`Flip`), luz que segue o mouse (`quickTo`), passagem do hero para os projetos (`ScrollTrigger`, com `pin` e `scrub`), logo do Contato desenhada pelo scroll (`ScrollTrigger` com `scrub`) e versão reduzida para quem ativa "reduzir movimento" (`matchMedia`). |
 | `next/font` | Fontes servidas pelo próprio site: Source Serif 4 (títulos), Geist (texto) e Geist Mono (detalhes). |
 | `next/image` | Imagens da colagem. |
 | `next/og` | Imagem de compartilhamento, gerada no build com a logo e as fontes do site. |
 | `proxy.ts` + `next/root-params` | Idiomas sem biblioteca: o proxy manda `/` para `/pt-br` ou `/en`, e os server components descobrem o idioma sem receber props. |
-| `node:test` | Testes das funções de idioma, de tema, das contas da fileira de projetos e do "clique simples", com o Node rodando TypeScript direto. |
+| `node:test` | Testes das funções de idioma, de tema, das contas da fileira de projetos, do "clique simples", do link de e-mail e da cópia do e-mail, com o Node rodando TypeScript direto. |
 | [Biome](https://biomejs.dev) | Lint e formatação. |
 | [pnpm](https://pnpm.io) | Gerenciador de pacotes. |
 
@@ -66,7 +66,7 @@ Quem abre `/` é redirecionado pelo `src/proxy.ts`. Vale primeiro o idioma escol
 O painel de preferências tem três opções: **Sistema** (o padrão), **Claro** e **Escuro**.
 
 - As cores ficam em `src/app/globals.css`. Cada cor que muda com o tema é declarada uma vez, com os dois valores: `light-dark(claro, escuro)`. Quem escolhe o lado é o `color-scheme` do `<html>`: `light dark` segue o sistema; `data-theme="light"` ou `"dark"` força um lado.
-- A escolha fica no `localStorage` (chave `theme`). Um script inline no `<head>` (`src/theme/theme-script.ts`) aplica a escolha antes da primeira pintura, então o tema errado não pisca.
+- A escolha fica no `localStorage` (chave `theme`). Um script inline no `<head>` (`src/theme/theme-script.ts`) aplica a escolha antes da primeira pintura, então o tema errado não pisca. Ele só existe no HTML do servidor (`src/theme/theme-script-tag.tsx`): na troca de idioma o Next monta o layout de novo no navegador, e um `<script>` criado pelo React no cliente não roda e gera aviso no console; nessa hora quem acerta o tema é o `ThemeSync`.
 - Para o que não é cor, use as variantes `light:` e `dark:` (ex.: `light:hidden`). Elas seguem a mesma regra: escolha forçada primeiro, sistema depois.
 - Todo texto passa AAA (7:1) nos dois temas, medido na tela contra o pior pixel do fundo (pontinhos, brilhos e colagem incluídos), de 320 a 1440px. O subtítulo do hero fica em cima da colagem e depende da almofada atrás dele: a névoa do `hero-grid.module.css` e o `subtitle-glow`. Ao criar uma cor nova, ou mexer nessa almofada, confira o contraste nos dois temas.
 - Os cards da colagem têm uma versão por tema (`public/hero/card-NN.svg` e `card-NN-light.svg`).
@@ -94,6 +94,23 @@ Esses valores foram medidos de 280 a 2560px de largura e deixam pelo menos 16px 
 
 A condição do modo cinema está escrita em dois lugares, e os dois precisam ser iguais: a variante `cinema` no `globals.css` e o `CINEMA_QUERY` no `src/animations/cinema-query.ts`. O `pnpm test` falha se forem diferentes.
 
+## Contato
+
+O e-mail fica em `src/data/site.ts` (`email`), e os textos nos dicionários (`contact` e `footer`). A seção (`src/components/contact/contact.tsx`) é server component; só duas peças rodam no cliente:
+
+- **Copiar e-mail** (`copy-email-button.tsx`): para quem não tem um programa de e-mail configurado, quando o `mailto:` não abre nada. O resultado aparece num `<output>` ao lado, que o leitor de tela anuncia. Sem JavaScript o botão some.
+- **Logo do fim** (`contact-logo.tsx` + `src/animations/contact-logo.ts`): o mesmo `createLogoDraw()` do preloader, ligado ao scroll com `scrub`. Termina no fim da página (`end: "max"`). Com "reduzir movimento" ou sem JavaScript, a logo fica inteira e parada.
+
+O link `mailto:` já vem com assunto (`emailSubject`), codificado com `encodeURIComponent` (`src/lib/mailto.ts`): o `URLSearchParams` trocaria espaço por `+`, e o `+` chegaria literal no assunto.
+
+A seção e o rodapé (`src/components/layout/footer.tsx`) ocupam juntos uma tela: a altura mínima da seção é a tela menos os 4.5rem do rodapé (`sm:min-h-18`). A partir de 640px, os tamanhos são `min(Xvw, Ysvh)`, então o conteúdo cabe na altura e, no fim da página, a seção aparece inteira. Ao mudar a altura do rodapé, mude a conta no `contact.tsx`.
+
+Antes do Contato, a página acabava no palco dos Projetos. Com uma seção depois do pin, três coisas passaram a depender dele:
+
+- **Fundo da navbar.** No modo cinema ele some só enquanto o palco está fixado. O ScrollTrigger põe a classe `PINNED_CLASS` (`src/animations/projects-targets.ts`) no palco com `toggleClass`, e a variante `stage-pinned:` do `globals.css` procura por ela. O `pnpm test` confere que os dois nomes são iguais.
+- **Âncora no endereço.** Ao abrir `/pt-br#contact`, o navegador pula até a seção antes de o pin existir; quando o pin cria o espaço dele, a seção desce. O `projects-focus.ts` refaz o pulo depois de medir o pin.
+- **Troca de layout.** Se o layout trocar com a pessoa no Contato (girar o celular, ligar "reduzir movimento"), o `projects-place.ts` guarda quanto ela tinha passado do fim do palco e a devolve ao mesmo ponto.
+
 ## Estrutura
 
 Cada arquivo tem uma responsabilidade só.
@@ -109,16 +126,17 @@ src/
 ├── components/
 │   ├── hero/        # partes do hero: colagem, título, informações, luz
 │   ├── projects/    # seção de projetos, card e o palco que liga o scroll
+│   ├── contact/     # seção de contato, botão de copiar e logo desenhada pelo scroll
 │   ├── intro/       # componente client que dispara a intro + preloader
-│   ├── layout/      # navbar e o fundo dela
+│   ├── layout/      # navbar e o fundo dela, rodapé e a margem lateral da página
 │   ├── preferences/ # botão e painel de preferências (idioma e tema)
 │   ├── status/      # telas de 404 e de erro
-│   └── ui/          # peças genéricas (logo, ícones, botões, indicador de status)
-├── data/            # o que não muda com o idioma (nome, redes, ids das seções), cards da colagem e projetos
+│   └── ui/          # peças genéricas (logo, ícones, botões, links das redes, indicador de status)
+├── data/            # o que não muda com o idioma (nome, e-mail, redes, ids das seções), cards da colagem e projetos
 ├── hooks/           # hooks de React (ex.: esperar as imagens carregarem, saber se a página rolou)
 ├── i18n/            # idiomas, dicionários, escolha do idioma e testes
 ├── theme/           # temas, script que evita piscar, escolha salva e testes
-└── lib/             # fontes, GSAP, URL do site, cores e helpers das imagens geradas
+└── lib/             # fontes, GSAP, URL do site, cores, link de e-mail, cópia e helpers das imagens geradas
 public/              # logo.svg (arquivo original da logo) e ícones do Android
 public/hero/         # imagens da colagem (uma versão por tema)
 ```
@@ -139,8 +157,8 @@ Os componentes marcam o que a intro anima com `data-intro`, e a timeline encontr
 - [x] Seção **Projetos** (`#projects`) com scroll cinematográfico
 - [ ] Imagens dos projetos nos cards
 - [ ] Seção **Sobre** (`#about`)
-- [ ] Seção **Contato** (`#contact`)
-- [ ] Animações de scroll nas seções Sobre e Contato
+- [x] Seção **Contato** (`#contact`), com a logo desenhada pelo scroll no fim da página
+- [ ] Animações de scroll na seção Sobre
 - [ ] Textos definitivos do hero em `src/i18n/dictionaries/` (hoje são provisórios)
 - [ ] Imagens reais na colagem: os cards em `public/hero/` ainda são ilustrações provisórias (quando chegarem, decidir se cada uma precisa de versão clara)
 - [ ] Links reais do GitHub e do LinkedIn
