@@ -66,7 +66,7 @@ Quem abre `/` é redirecionado pelo `src/proxy.ts`. Vale primeiro o idioma escol
 O painel de preferências tem três opções: **Sistema** (o padrão), **Claro** e **Escuro**.
 
 - As cores ficam em `src/app/globals.css`. Cada cor que muda com o tema é declarada uma vez, com os dois valores: `light-dark(claro, escuro)`. Quem escolhe o lado é o `color-scheme` do `<html>`: `light dark` segue o sistema; `data-theme="light"` ou `"dark"` força um lado.
-- A escolha fica no `localStorage` (chave `theme`). Um script inline no `<head>` (`src/theme/theme-script.ts`) aplica a escolha antes da primeira pintura, então o tema errado não pisca.
+- A escolha fica no `localStorage` (chave `theme`). Um script inline no `<head>` (`src/theme/theme-script.ts`) aplica a escolha antes da primeira pintura, então o tema errado não pisca. Ele só existe no HTML do servidor (`src/theme/theme-script-tag.tsx`): na troca de idioma o Next monta o layout de novo no navegador, e um `<script>` criado pelo React no cliente não roda e gera aviso no console; nessa hora quem acerta o tema é o `ThemeSync`.
 - Para o que não é cor, use as variantes `light:` e `dark:` (ex.: `light:hidden`). Elas seguem a mesma regra: escolha forçada primeiro, sistema depois.
 - Todo texto passa AAA (7:1) nos dois temas, medido na tela contra o pior pixel do fundo (pontinhos, brilhos e colagem incluídos), de 320 a 1440px. O subtítulo do hero fica em cima da colagem e depende da almofada atrás dele: a névoa do `hero-grid.module.css` e o `subtitle-glow`. Ao criar uma cor nova, ou mexer nessa almofada, confira o contraste nos dois temas.
 - Os cards da colagem têm uma versão por tema (`public/hero/card-NN.svg` e `card-NN-light.svg`).

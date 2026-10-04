@@ -8,7 +8,7 @@ import { hasLocale, hreflangPaths, localeInfo, locales } from "@/i18n/locales";
 import { fontVariables } from "@/lib/fonts";
 import { siteUrl } from "@/lib/site-url";
 import { themeColors } from "@/lib/theme-colors";
-import { themeScript } from "@/theme/theme-script";
+import { ThemeScriptTag } from "@/theme/theme-script-tag";
 import { ThemeSync } from "@/theme/theme-sync";
 import "../globals.css";
 
@@ -86,10 +86,7 @@ export default async function RootLayout({
       <head>
         {/* Roda enquanto o navegador lê o HTML, antes da primeira pintura:
             a escolha salva aparece sem piscar o outro tema. */}
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: texto fixo, montado em theme-script.ts só com constantes do projeto
-          dangerouslySetInnerHTML={{ __html: themeScript }}
-        />
+        <ThemeScriptTag />
       </head>
       <body className="flex min-h-full flex-col bg-page font-sans text-fg">
         <ThemeSync />
